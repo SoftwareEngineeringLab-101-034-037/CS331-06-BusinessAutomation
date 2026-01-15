@@ -31,3 +31,17 @@ Explainable Execution Plans
 Bot shows a step-by-step plan before executing and allows user edits/approval.
 Composable Task Intelligence
 
+3. End-to-End Business Process Automation Platform
+
+Objective is to build a web-based platform that automates business workflows and internal processes using a rule-driven orchestration engine.
+Each workflow is modeled as a sequence of steps with conditional routing. Users submit requests which are processed automatically based on defined rules and roles.
+
+Novelty ideas:
+
+Analytics engine for bottleneck detection, SLA prediction, anomaly detection, and process optimization.
+
+Human Behavior–Aware Routing: The engine learns approval patterns of individuals like Who delays most, Who approves fastest. Then it dynamically routes tasks to optimize completion time.
+
+Workflow Digital Twin & Simulation Engine: Before deploying a workflow, the system simulates it using historical and synthetic data to predict: Bottlenecks, Delays, SLA violations, Resource overload
+
+AI Workflow generator from Natural language along with option for No Code drag and drop creation of Workflows.
