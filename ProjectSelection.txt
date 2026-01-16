@@ -45,3 +45,20 @@ Human Behavior–Aware Routing: The engine learns approval patterns of individua
 Workflow Digital Twin & Simulation Engine: Before deploying a workflow, the system simulates it using historical and synthetic data to predict: Bottlenecks, Delays, SLA violations, Resource overload
 
 AI Workflow generator from Natural language along with option for No Code drag and drop creation of Workflows.
+
+
+
+We have selected End-to-End Business Process Automation Platform as our project.
+
+This project focuses on building a generalized workflow automation system where business processes are not hardcoded, but are dynamically created and executed within the platform.
+
+Admins can design workflows using a drag-and-drop builder or by providing a natural language description, after which the system generates executable workflows. Once deployed, real users log in, receive role-based tasks, complete approvals or actions, and the workflow progresses automatically according to defined rules.
+
+
+Reasons for Choosing This Project
+
+1.Real-World Applicability:
+The project models how actual business workflow automation platforms work, making it practically relevant and industry-aligned.
+
+2.Strong System Design Focus:
+It involves workflow engines, task orchestration, role-based access control, and dynamic execution, demonstrating solid backend and system engineering skills.
