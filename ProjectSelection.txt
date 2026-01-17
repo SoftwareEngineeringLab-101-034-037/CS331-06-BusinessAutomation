@@ -62,3 +62,18 @@ The project models how actual business workflow automation platforms work, makin
 
 2.Strong System Design Focus:
 It involves workflow engines, task orchestration, role-based access control, and dynamic execution, demonstrating solid backend and system engineering skills.
+
+
+
+Why this project was chosen?
+Well, this project ideas seems a vast one with many possibilities and with high engineering depth. The idea itself helps automate iterative systems in business. This project seems to me to give strong software engineering exposure. Also, the fact that the platform will be modular, service oriented will make it technically feasible.
+Although the overall system is large in scope, each module individually is simple. The complexity arises from integration than technical difficulty, making it suitable for an engineering problem.
+
+
+Strong novelty features we might add:
+1. Workflow creation using Natural Language Processing. 
+(Example: User says create me an employee onboarding workflow which starts at document verification and goes on to finance and then team selection).
+
+2. The software can determine if a particular node in the workflow is failing or creating consistent delays. In that case it can intelligently route the tasks of that workflow through other routes.
+It might use AI and additional metrics to determine the best path if the original one is not working as intended.
+
