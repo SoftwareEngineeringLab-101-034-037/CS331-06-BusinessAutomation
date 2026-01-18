@@ -5,7 +5,7 @@ This is for Project Selection. Everyone is to add their preferred project ideas 
 1. Automated Quality Inspection using Computer Vision
 An image-based system that detects surface and structural defects (cracks, missing parts, deformations) in products, highlights the defective regions, and outputs pass/fail decisions to reduce manual inspection and improve consistency.
 
-Novelty (40% weightage)
+Novelty 
 
 Explainable Defect Localization — highlights defect regions (bounding boxes / heatmaps) and provides a short rule-based explanation for the failure.
 
@@ -63,8 +63,6 @@ The project models how actual business workflow automation platforms work, makin
 2.Strong System Design Focus:
 It involves workflow engines, task orchestration, role-based access control, and dynamic execution, demonstrating solid backend and system engineering skills.
 
-
-
 Why this project was chosen?
 Well, this project ideas seems a vast one with many possibilities and with high engineering depth. The idea itself helps automate iterative systems in business. This project seems to me to give strong software engineering exposure. Also, the fact that the platform will be modular, service oriented will make it technically feasible.
 Although the overall system is large in scope, each module individually is simple. The complexity arises from integration than technical difficulty, making it suitable for an engineering problem.
@@ -76,4 +74,3 @@ Strong novelty features we might add:
 
 2. The software can determine if a particular node in the workflow is failing or creating consistent delays. In that case it can intelligently route the tasks of that workflow through other routes.
 It might use AI and additional metrics to determine the best path if the original one is not working as intended.
-
