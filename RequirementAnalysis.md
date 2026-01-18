@@ -153,36 +153,78 @@ The platform is generic and can be used by any organization to model their inter
 * The system shall detect process bottlenecks.
 * The system shall generate workload distribution reports.
 
-## 6. Non-Functional Requirements (NFR)
+## 6. Advanced Functional Requirements
 
-### 6.1 Performance & Scalability
+### 6.1 No-Code Visual Workflow Builder
+
+* The system shall provide a drag-and-drop workflow designer.
+* The system shall visually model workflows as directed graphs.
+* The system shall validate workflows before deployment.
+* The system shall simulate execution paths.
+* The system shall support version comparison.
+
+### 6.2 Natural Language Workflow Generator
+
+* The system shall allow workflow creation using natural language description.
+* The system shall generate workflow structure automatically.
+* The system shall generate default rules and steps.
+* The system shall allow manual refinement of generated workflows.
+
+### 6.3 Business Process Intelligence Engine
+
+* The system shall analyze workflow execution logs.
+* The system shall detect performance bottlenecks.
+* The system shall predict SLA violations.
+* The system shall detect anomalous execution patterns.
+* The system shall recommend workflow optimizations.
+
+
+### 6.4 Human Behavior-Aware Routing
+
+* The system shall learn approval behavior of individuals.
+* The system shall build user performance profiles.
+* The system shall dynamically route tasks to optimize throughput.
+* The system shall avoid known human bottlenecks.
+
+
+### 6.5 Workflow Digital Twin & Simulation Engine
+
+* The system shall simulate workflows before deployment.
+* The system shall generate synthetic workloads.
+* The system shall predict execution delays.
+* The system shall predict resource overload.
+* The system shall validate SLA feasibility.
+
+## 8. Non-Functional Requirements (NFR)
+
+### 8.1 Performance & Scalability
 
 * The system shall support at least **500 concurrent users** under normal operating conditions.
 * Workflow task transitions shall be processed within **2 seconds** for typical workloads.
 * The platform shall support horizontal scaling of backend services.
 * The workflow engine shall handle increasing workloads without architectural changes.
 
-### 6.2 Security & Access Control
+### 8.2 Security & Access Control
 
 * The system shall enforce **role-based access control (RBAC)** for all operations.
 * Users shall be authenticated using secure token-based authentication.
 * All client-server communication shall be encrypted using HTTPS.
 * Users shall only be able to access workflows and data belonging to their organization.
 
-### 6.3 Reliability & Availability
+### 8.3 Reliability & Availability
 
 * The system shall ensure no loss of workflow state during execution.
 * The platform shall recover safely from service failures without data corruption.
 * Task actions shall be idempotent to prevent duplicate execution.
 * The system shall be designed for continuous availability with minimal downtime.
 
-### 6.4 Maintainability & Extensibility
+### 8.4 Maintainability & Extensibility
 
 * The system shall follow a modular, service-oriented architecture.
 * Each core module shall be independently maintainable and testable.
 * The platform shall allow new workflow types to be added without code changes.
 
-### 6.5 Usability & Auditability
+### 8.5 Usability & Auditability
 
 * The platform shall provide intuitive role-based dashboards for all users.
 * The workflow builder shall be usable by non-technical administrators.
