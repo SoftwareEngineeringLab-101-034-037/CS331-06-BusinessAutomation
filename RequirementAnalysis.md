@@ -255,3 +255,37 @@ The platform is generic and can be used by any organization to model their inter
 
 
 These non-functional requirements ensure that the platform operates as a secure, scalable, reliable, and maintainable enterprise workflow automation system.
+
+
+## 9. System Constraints 
+
+### 9.1 Technology & Platform Constraints
+
+* The system shall be built primarily using open-source frameworks and libraries for core platform components.
+* The system shall be deployable on commodity cloud infrastructure (AWS, GCP, Azure, or equivalent).
+* The system shall follow a cloud-native architecture supporting containerized deployment.
+* The system shall expose all business functionality via RESTful APIs.
+* The system shall support browser-based access for all user-facing interfaces.
+
+
+### 9.2 Integration Constraints
+
+* The system shall support integration with external enterprise systems using REST APIs and webhooks.
+* The system shall support integration with third-party services subject to their API availability and licensing policies.
+* The system shall not directly depend on proprietary APIs for core platform functionality.
+* External integrations shall be implemented as optional connectors and plugins.
+
+
+### 9.3 Security & Compliance Constraints
+
+* The system shall follow industry-standard authentication and authorization practices.
+* The system shall enforce secure communication.
+* The system shall comply with basic data protection and privacy principles.
+* Sensitive workflow data shall be stored securely.
+
+
+### 9.4 Operational Constraints
+
+* The system shall support deployment in a single-region cloud environment.
+* The system shall support backup and recovery mechanisms.
+* The system shall support logging and monitoring for operational visibility.
