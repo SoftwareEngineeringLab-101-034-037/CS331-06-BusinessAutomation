@@ -57,61 +57,101 @@ The platform is generic and can be used by any organization to model their inter
 
 
 
+## 5. Functional Requirements (Core Platform)
 
-## 5. Functional Requirements
+### 5.1 Organization & User Management
 
-### 5.1 User Management
+* The system shall allow creation of multiple organizations (multi-tenant support).
+* The system shall provide an isolated workspace for each organization.
+* The system shall allow administrators to create departments within an organization.
+* The system shall allow administrators to define custom roles.
+* The system shall allow administrators to add users and assign them roles.
+* The system shall allow users to authenticate securely.
+* The system shall enforce role-based access control (RBAC).
+* The system shall allow delegated administration at department level.
 
-- The system shall allow administrators to create organizations.
-- The system shall allow administrators to create departments.
-- The system shall allow administrators to create roles.
-- The system shall allow administrators to add users.
-- The system shall allow users to log in securely.
-- The system shall enforce role-based access control.
 
-### 5.2 Workflow Management
+### 5.2 Workflow Design & Configuration
 
-- The system shall allow administrators to create workflows.
-- The system shall allow administrators to define workflow steps.
-- The system shall allow administrators to assign roles to workflow steps.
-- The system shall allow administrators to define conditional routing rules.
-- The system shall support parallel workflow steps.
-- The system shall support workflow versioning.
+* The system shall allow administrators to create configurable workflows.
+* The system shall allow administrators to define workflow steps.
+* The system shall allow administrators to assign roles to workflow steps.
+* The system shall allow administrators to define input data schema for workflows.
+* The system shall allow administrators to define approval actions per step.
+* The system shall allow administrators to define conditional routing rules.
+* The system shall support sequential and parallel workflow steps.
+* The system shall support workflow versioning and rollback.
 
-### 5.3 Request Management
-- The system shall allow users to submit requests for available workflows.
-- The system shall create a request instance for each submission.
-- The system shall track the lifecycle of each request.
-- The system shall display request status in real-time.
-- The system shall allow users to add comments to requests.
 
-### 5.4 Task Management
-- The system shall generate tasks based on workflow steps.
-- The system shall assign tasks to users based on role.
-- The system shall display assigned tasks in a task inbox.
-- The system shall allow users to approve or reject tasks.
-- The system shall enforce SLA deadlines on tasks.
-- The system shall escalate overdue tasks.
+### 5.3 Workflow Execution Engine
 
-### 5.5 Rule Engine
-- The system shall evaluate workflow rules dynamically.
-- The system shall route tasks based on rule outcomes.
-- The system shall support complex logical expressions.
+* The system shall execute workflows as state machines.
+* The system shall create a workflow instance for every request.
+* The system shall maintain execution state persistently.
+* The system shall support long-running workflows.
+* The system shall support conditional branching.
+* The system shall synchronize parallel workflow branches.
+* The system shall support event-driven execution.
 
-### 5.6 Notification System
-- The system shall notify users when tasks are assigned.
-- The system shall notify users on task completion.
-- The system shall notify users on SLA breach.
 
-### 5.7 Audit and Compliance
-- The system shall log all workflow actions.
-- The system shall store decision history.
-- The system shall provide audit reports.
+### 5.4 Request Lifecycle Management
 
-### 5.8 Analytics & Reporting
-- The system shall generate workflow performance reports.
-- The system shall calculate average completion times.
-- The system shall detect workflow bottlenecks.
+* The system shall allow users to initiate requests for available workflows.
+* The system shall validate request data against workflow schema.
+* The system shall create a unique request instance.
+* The system shall track the complete lifecycle of each request.
+* The system shall display real-time request status.
+* The system shall provide timeline-based request tracking.
+* The system shall allow users to add comments and attachments.
+
+
+### 5.5 Task Orchestration & Work Execution
+
+* The system shall generate tasks based on workflow steps.
+* The system shall assign tasks based on role and routing rules.
+* The system shall display tasks in a personal task inbox.
+* The system shall generate role-specific working dialogs.
+* The system shall allow users to perform task actions (approve, reject, forward).
+* The system shall capture task decisions and comments.
+* The system shall support task reassignment and delegation.
+
+
+### 5.6 Rule Engine & Policy Enforcement
+
+* The system shall support declarative business rules.
+* The system shall evaluate rules dynamically at runtime.
+* The system shall support rule chaining and prioritization.
+* The system shall enforce business policies automatically.
+* The system shall support rule simulation and validation.
+
+
+### 5.7 Notification & Escalation Engine
+
+* The system shall notify users when tasks are assigned.
+* The system shall notify users when actions are required.
+* The system shall notify users on task completion.
+* The system shall notify users on SLA breaches.
+* The system shall support escalation to higher authority.
+* The system shall support email and in-app notifications.
+
+
+### 5.8 Audit, Compliance & Governance
+
+* The system shall log all workflow transitions.
+* The system shall log all user actions.
+* The system shall maintain immutable audit trails.
+* The system shall store approval history.
+* The system shall generate compliance reports.
+* The system shall support regulatory audit requirements.
+
+
+### 5.9 Analytics & Reporting
+
+* The system shall generate workflow performance reports.
+* The system shall calculate different kinds of metrics based on the logs.
+* The system shall track SLA compliance.
+* The system shall detect process bottlenecks.
+* The system shall generate workload distribution reports.
 
 ## 6. Non-Functional Requirements (NFR)
 
