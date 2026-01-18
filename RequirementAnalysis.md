@@ -113,4 +113,41 @@ The platform is generic and can be used by any organization to model their inter
 - The system shall calculate average completion times.
 - The system shall detect workflow bottlenecks.
 
+## 6. Non-Functional Requirements (NFR)
 
+### 6.1 Performance & Scalability
+
+* The system shall support at least **500 concurrent users** under normal operating conditions.
+* Workflow task transitions shall be processed within **2 seconds** for typical workloads.
+* The platform shall support horizontal scaling of backend services.
+* The workflow engine shall handle increasing workloads without architectural changes.
+
+### 6.2 Security & Access Control
+
+* The system shall enforce **role-based access control (RBAC)** for all operations.
+* Users shall be authenticated using secure token-based authentication.
+* All client-server communication shall be encrypted using HTTPS.
+* Users shall only be able to access workflows and data belonging to their organization.
+
+### 6.3 Reliability & Availability
+
+* The system shall ensure no loss of workflow state during execution.
+* The platform shall recover safely from service failures without data corruption.
+* Task actions shall be idempotent to prevent duplicate execution.
+* The system shall be designed for continuous availability with minimal downtime.
+
+### 6.4 Maintainability & Extensibility
+
+* The system shall follow a modular, service-oriented architecture.
+* Each core module shall be independently maintainable and testable.
+* The platform shall allow new workflow types to be added without code changes.
+
+### 6.5 Usability & Auditability
+
+* The platform shall provide intuitive role-based dashboards for all users.
+* The workflow builder shall be usable by non-technical administrators.
+* The system shall maintain a complete audit trail of all workflow actions.
+* All approvals and modifications shall be timestamped and logged.
+
+
+These non-functional requirements ensure that the platform operates as a secure, scalable, reliable, and maintainable enterprise workflow automation system.
