@@ -1,0 +1,105 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam usecase {
+  BackgroundColor White
+  BorderColor Black
+  FontSize 11
+}
+
+' ACTORS
+actor "New Employee" as NEMP
+actor "Employee" as EMP
+actor "Admin" as ADM
+actor "Org Admin" as OADM
+actor "Analyst" as ANL
+actor "Authentication Service" as AUTH
+actor "Identity Provider (IdP)" as IDP
+actor "External Services\n(WhatsApp, Gmail, Zoom)" as EXT
+
+OADM --|> ADM
+ADM --|> EMP
+ANL --|> EMP
+
+' SYSTEM BOUNDARY
+package "Business Process Automation Platform" {
+
+  usecase "Create Organization" as UC01
+  usecase "Configure Org Structure & Roles" as UC02
+  usecase "Invite / Onboard Employees" as UC03
+  usecase "Join Organization" as UC04
+
+  usecase "Sign In & Manage Session" as UC05
+
+  usecase "Design & Publish Workflow" as UC10
+  usecase "Generate Workflow from Intent" as UC11
+  usecase "Configure Workflow Rules" as UC12
+
+  usecase "Submit Workflow Request" as UC20
+  usecase "Track Request Progress" as UC21
+  usecase "Cancel / Reopen Request" as UC22
+
+  usecase "Assign Task" as UC30
+  usecase "Complete Task" as UC31
+  usecase "Escalate Task" as UC32
+
+  usecase "Trigger External Action" as UC40
+
+  usecase "Audit & Compliance Reporting" as UC50
+
+  usecase "Analyze Workflow Performance" as UC60
+  usecase "Detect Bottlenecks & Delays" as UC61
+  usecase "Simulate Workflow (Digital Twin)" as UC62
+}
+
+' HUMAN INTERACTIONS
+OADM -- UC01
+
+ADM -- UC02
+ADM -- UC03
+ADM -- UC10
+ADM -- UC11
+ADM -- UC12
+ADM -- UC30
+ADM -- UC32
+
+NEMP -- UC04
+
+EMP -- UC05
+EMP -- UC20
+EMP -- UC21
+EMP -- UC22
+EMP -- UC31
+
+ANL -- UC60
+ANL -- UC61
+ANL -- UC62
+
+' AUTH / IDENTITY
+UC05 -- AUTH
+UC04 -- AUTH
+UC01 -- AUTH
+
+UC05 -- IDP
+UC04 -- IDP
+
+' EXTERNAL SERVICES
+UC40 -- EXT
+
+' INCLUDE / EXTEND
+UC11 .> UC10 : <<extend>>
+UC12 .> UC10 : <<include>>
+
+UC21 .> UC20 : <<include>>
+UC31 .> UC50 : <<include>>
+UC32 .> UC31 : <<extend>>
+
+UC40 .> UC31 : <<extend>>
+
+UC61 .> UC60 : <<extend>>
+UC62 .> UC60 : <<extend>>
+
+UC01 -[hidden]- ADM
+
+@enduml
