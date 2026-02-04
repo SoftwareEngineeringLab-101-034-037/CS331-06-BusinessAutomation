@@ -116,3 +116,45 @@ dfd.edge('external_services', 'ds_audit', xlabel='Integration Logs', style='dash
 
 # D5: Business Rules (Read-only)
 dfd.edge('ds_rules', 'system', xlabel='Read: Business Rules', style='dashed', color=DATASTORE_LINE_COLOR)
+
+# ===================== LAYOUT =====================
+with dfd.subgraph() as s:
+    s.attr(rank='same')
+    s.node('org_admin')
+    s.node('analyst')
+
+with dfd.subgraph() as s:
+    s.attr(rank='same')
+    s.node('employee')
+    s.node('manager')
+    s.node('new_employee')
+
+with dfd.subgraph() as s:
+    s.attr(rank='same')
+    s.node('external_services')
+    s.node('idp')
+
+# place datastores in a row (same rank) under system for symmetry
+with dfd.subgraph() as s:
+    s.attr(rank='same')
+    s.node('ds_users')
+    s.node('ds_workflows')
+    s.node('ds_requests')
+    s.node('ds_audit')
+    s.node('ds_rules')
+
+# ===================== LEGEND  =====================
+legend_text = (
+    "Legend:\\n"
+    "Solid line = runtime messages / events\\n"
+    "Dashed line = datastore access (read/write)\\n"
+    "Read = arrow toward system from datastore\\n"
+    "Write = arrow from system toward datastore\\n"
+    "Audit store = write-only sink"
+)
+# make legend larger and place near datastores by nudging rank
+dfd.node('legend', legend_text, shape='plaintext', fontsize='12')
+with dfd.subgraph() as s:
+    s.attr(rank='same')
+    s.node('ds_audit')
+    s.node('legend')
