@@ -94,3 +94,25 @@ dfd.edge('external_services', 'system', xlabel='Delivery Status')
 # Identity Provider - explicit one-way flows each direction (clear arrowheads)
 dfd.edge('system', 'idp', xlabel='Auth Request (validate)')
 dfd.edge('idp', 'system', xlabel='Auth Token / User Identity')
+
+# D1: User & Org Data
+# system -> datastore : Write
+dfd.edge('system', 'ds_users', xlabel='Write: User & Org Data', style='dashed', color=DATASTORE_LINE_COLOR)
+# datastore -> system : Read
+dfd.edge('ds_users', 'system', xlabel='Read: User & Org Data', style='dashed', color=DATASTORE_LINE_COLOR)
+
+# D2: Workflow Definitions (R/W)
+dfd.edge('system', 'ds_workflows', xlabel='Write: Workflow Definitions', style='dashed', color=DATASTORE_LINE_COLOR)
+dfd.edge('ds_workflows', 'system', xlabel='Read: Workflow Definitions', style='dashed', color=DATASTORE_LINE_COLOR)
+
+# D3: Requests & Tasks (R/W)
+dfd.edge('system', 'ds_requests', xlabel='Write: Requests & Tasks', style='dashed', color=DATASTORE_LINE_COLOR)
+dfd.edge('ds_requests', 'system', xlabel='Read: Requests & Tasks', style='dashed', color=DATASTORE_LINE_COLOR)
+
+# D4: Audit Logs (Write-only sink)
+dfd.edge('system', 'ds_audit', xlabel='Write Logs (W)', style='dashed', color=DATASTORE_LINE_COLOR)
+# Integrations may also log
+dfd.edge('external_services', 'ds_audit', xlabel='Integration Logs', style='dashed', color=DATASTORE_LINE_COLOR)
+
+# D5: Business Rules (Read-only)
+dfd.edge('ds_rules', 'system', xlabel='Read: Business Rules', style='dashed', color=DATASTORE_LINE_COLOR)
