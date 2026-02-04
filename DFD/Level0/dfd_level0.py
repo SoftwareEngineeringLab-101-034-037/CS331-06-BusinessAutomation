@@ -158,3 +158,17 @@ with dfd.subgraph() as s:
     s.attr(rank='same')
     s.node('ds_audit')
     s.node('legend')
+
+
+# ===================== TITLE =====================
+dfd.attr(
+    label='\\nLevel 0 Data Flow Diagram — Business Process Automation Platform\\n',
+    labelloc='t',
+    fontsize='20',
+    fontname='Arial Bold'
+)
+
+# ===================== RENDER =====================
+# Renders to Level0_DFD_Pro.svg (or .png if OUT_FORMAT='png')
+outpath = dfd.render('Level0_DFD_Pro', cleanup=True)
+print(f"✓ Diagram generated: {outpath}")
