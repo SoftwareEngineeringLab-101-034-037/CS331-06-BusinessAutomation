@@ -54,14 +54,15 @@ DATASTORE_LINE_COLOR = '#6A1B9A'  # darker purple
 
 # ===================== NODES =====================
 dfd.node('org_admin', 'Organization Admin', **user_style)
+dfd.node('admin', 'Admin', **user_style)
 dfd.node('analyst', 'Analyst', **user_style)
 
 dfd.node('employee', 'Employee', **user_style)
-dfd.node('manager', 'Manager', **user_style)
 dfd.node('new_employee', 'New Employee', **user_style)
 
 dfd.node('external_services', 'External Services\n(Email / SMS / Calendar)', **system_style)
 dfd.node('idp', 'Identity Provider\n(IdP)', **system_style)
+dfd.node('auth_service', 'Authentication\nService', **system_style)
 
 dfd.node('system', '0\nBusiness Process\nAutomation Platform', **process_style)
 
@@ -76,14 +77,14 @@ dfd.node('ds_rules', 'D5\nBusiness Rules', **datastore_style)
 dfd.edge('org_admin', 'system', xlabel='Org config / User mgmt')
 dfd.edge('system', 'org_admin', xlabel='Confirmation / Status')
 
+dfd.edge('admin', 'system', xlabel='Workflow / Task / Onboarding mgmt')
+dfd.edge('system', 'admin', xlabel='Confirmation / Status')
+
 dfd.edge('analyst', 'system', xlabel='Report Query')
 dfd.edge('system', 'analyst', xlabel='Metrics / Insights')
 
 dfd.edge('employee', 'system', xlabel='Submit Request / Task Update')
 dfd.edge('system', 'employee', xlabel='Tasks / Notifications / Status')
-
-dfd.edge('manager', 'system', xlabel='Pending Tasks / Escalations')
-dfd.edge('system', 'manager', xlabel='Approve / Reject')
 
 dfd.edge('new_employee', 'system', xlabel='Join Request / Data')
 dfd.edge('system', 'new_employee', xlabel='Invite / Onboarding Tasks')
@@ -94,6 +95,10 @@ dfd.edge('external_services', 'system', xlabel='Delivery Status')
 # Identity Provider - explicit one-way flows each direction (clear arrowheads)
 dfd.edge('system', 'idp', xlabel='Auth Request (validate)')
 dfd.edge('idp', 'system', xlabel='Auth Token / User Identity')
+
+# Authentication Service - handles session management and access control
+dfd.edge('system', 'auth_service', xlabel='Session / Access Request')
+dfd.edge('auth_service', 'system', xlabel='Session Token / Access Decision')
 
 # D1: User & Org Data
 # system -> datastore : Write
@@ -121,20 +126,21 @@ dfd.edge('ds_rules', 'system', xlabel='Read: Business Rules', style='dashed', co
 with dfd.subgraph() as s:
     s.attr(rank='same')
     s.node('org_admin')
+    s.node('admin')
     s.node('analyst')
 
 with dfd.subgraph() as s:
     s.attr(rank='same')
     s.node('employee')
-    s.node('manager')
     s.node('new_employee')
 
 with dfd.subgraph() as s:
     s.attr(rank='same')
     s.node('external_services')
     s.node('idp')
+    s.node('auth_service')
 
-# place datastores in a row (same rank) under system for symmetry
+
 with dfd.subgraph() as s:
     s.attr(rank='same')
     s.node('ds_users')
