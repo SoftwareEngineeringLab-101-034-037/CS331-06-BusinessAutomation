@@ -52,3 +52,22 @@ datastore_style = dict(
 # darker, more visible purple for dashed datastore lines
 DATASTORE_LINE_COLOR = '#6A1B9A'  # darker purple
 
+# ===================== NODES =====================
+dfd.node('org_admin', 'Organization Admin', **user_style)
+dfd.node('analyst', 'Analyst', **user_style)
+
+dfd.node('employee', 'Employee', **user_style)
+dfd.node('manager', 'Manager', **user_style)
+dfd.node('new_employee', 'New Employee', **user_style)
+
+dfd.node('external_services', 'External Services\n(Email / SMS / Calendar)', **system_style)
+dfd.node('idp', 'Identity Provider\n(IdP)', **system_style)
+
+dfd.node('system', '0\nBusiness Process\nAutomation Platform', **process_style)
+
+dfd.node('ds_users', 'D1\nUser & Org Data', **datastore_style)
+dfd.node('ds_workflows', 'D2\nWorkflow Definitions', **datastore_style)
+dfd.node('ds_requests', 'D3\nRequests & Tasks', **datastore_style)
+dfd.node('ds_audit', 'D4\nAudit Logs & Reports', **datastore_style)
+dfd.node('ds_rules', 'D5\nBusiness Rules', **datastore_style)
+
