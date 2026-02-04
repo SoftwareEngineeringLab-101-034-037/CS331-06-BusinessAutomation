@@ -71,3 +71,26 @@ dfd.node('ds_requests', 'D3\nRequests & Tasks', **datastore_style)
 dfd.node('ds_audit', 'D4\nAudit Logs & Reports', **datastore_style)
 dfd.node('ds_rules', 'D5\nBusiness Rules', **datastore_style)
 
+# ===================== DATA FLOWS (runtime / events) =====================
+# Use xlabel (xlabels) because orthogonal edges don't handle inline edge labels well
+dfd.edge('org_admin', 'system', xlabel='Org config / User mgmt')
+dfd.edge('system', 'org_admin', xlabel='Confirmation / Status')
+
+dfd.edge('analyst', 'system', xlabel='Report Query')
+dfd.edge('system', 'analyst', xlabel='Metrics / Insights')
+
+dfd.edge('employee', 'system', xlabel='Submit Request / Task Update')
+dfd.edge('system', 'employee', xlabel='Tasks / Notifications / Status')
+
+dfd.edge('manager', 'system', xlabel='Pending Tasks / Escalations')
+dfd.edge('system', 'manager', xlabel='Approve / Reject')
+
+dfd.edge('new_employee', 'system', xlabel='Join Request / Data')
+dfd.edge('system', 'new_employee', xlabel='Invite / Onboarding Tasks')
+
+dfd.edge('system', 'external_services', xlabel='Trigger Actions (email/sms/calendar)')
+dfd.edge('external_services', 'system', xlabel='Delivery Status')
+
+# Identity Provider - explicit one-way flows each direction (clear arrowheads)
+dfd.edge('system', 'idp', xlabel='Auth Request (validate)')
+dfd.edge('idp', 'system', xlabel='Auth Token / User Identity')
