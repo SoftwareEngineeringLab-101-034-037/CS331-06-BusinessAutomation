@@ -209,3 +209,75 @@ dfd.edge('p2', 'd5', label='R/W', **ds_style)
 dfd.edge('p3', 'd5', label='Read', **ds_style)
 dfd.edge('p5', 'd5', label='Read', **ds_style)
 dfd.edge('p6', 'd5', label='Read', **ds_style)
+
+
+
+# ===================== LAYOUT GROUPING =====================
+
+# Users left column
+with dfd.subgraph() as s:
+    s.attr(rank='same')
+    s.node('org_admin')
+    s.node('new_employee')
+
+with dfd.subgraph() as s:
+    s.attr(rank='same')
+    s.node('employee')
+    s.node('manager')
+    s.node('analyst')
+
+# External systems right column
+with dfd.subgraph() as s:
+    s.attr(rank='same')
+    s.node('external_services')
+    s.node('idp')
+
+# Process row 1
+with dfd.subgraph() as s:
+    s.attr(rank='same')
+    s.node('p1')
+    s.node('p2')
+
+# Process row 2 (core)
+with dfd.subgraph() as s:
+    s.attr(rank='same')
+    s.node('p3')
+    s.node('p4')
+    s.node('p5')
+    s.node('p6')
+
+# Process row 3
+with dfd.subgraph() as s:
+    s.attr(rank='same')
+    s.node('p7')
+    s.node('p8')
+    s.node('p9')
+
+# Data stores at bottom
+with dfd.subgraph() as s:
+    s.attr(rank='same')
+    s.node('d1')
+    s.node('d2')
+    s.node('d3')
+    s.node('d4')
+    s.node('d5')
+
+# ===================== LEGEND =====================
+legend_text = (
+    "LEGEND\\n"
+    "═════════════════════════════════\\n"
+    "Blue Box = User (External Entity)\\n"
+    "Pink Box = External System\\n"
+    "Yellow Circle = Subprocess\\n"
+    "Green Box = Data Store\\n"
+    "═════════════════════════════════\\n"
+    "Solid Line = Data Flow\\n"
+    "Purple Line = Inter-Process Flow\\n"
+    "Dashed Line = Data Store Access\\n"
+)
+dfd.node('legend', legend_text, shape='plaintext', fontsize='18', fontname='Arial Bold')
+
+with dfd.subgraph() as s:
+    s.attr(rank='same')
+    s.node('d5')
+    s.node('legend')
