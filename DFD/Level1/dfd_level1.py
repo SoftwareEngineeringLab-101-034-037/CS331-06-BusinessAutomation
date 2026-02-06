@@ -106,3 +106,42 @@ dfd.node('d2', 'D2 | Workflow Definitions', **datastore_style, width='6.0', heig
 dfd.node('d3', 'D3 | Requests & Tasks', **datastore_style, width='6.0', height='1.2')
 dfd.node('d4', 'D4 | Audit Logs & Reports', **datastore_style, width='6.0', height='1.2')
 dfd.node('d5', 'D5 | Business Rules', **datastore_style, width='5.5', height='1.2')
+
+# ===================== DATA FLOWS =====================
+
+# --- External Entity → Process Flows ---
+
+# Organization Admin flows
+dfd.edge('org_admin', 'p1', label='User Config')
+dfd.edge('p1', 'org_admin', label='Confirmation')
+dfd.edge('org_admin', 'p2', label='Workflow\nDesign')
+
+# Admin flows
+dfd.edge('admin', 'p2', label='Workflow/Rule\nConfig')
+dfd.edge('admin', 'p5', label='Manual\nAssignment')
+
+# New Employee flows
+dfd.edge('new_employee', 'p1', label='Join Request')
+dfd.edge('p1', 'new_employee', label='Onboarding')
+
+# Employee flows
+dfd.edge('employee', 'p4', label='Submit\nRequest')
+dfd.edge('p4', 'employee', label='Request\nStatus')
+dfd.edge('p5', 'employee', label='Tasks')
+dfd.edge('employee', 'p5', label='Task\nActions')
+
+# Manager flows
+dfd.edge('p5', 'manager', label='Pending\nTasks')
+dfd.edge('manager', 'p5', label='Approvals')
+
+# Analyst flows
+dfd.edge('analyst', 'p9', label='Queries')
+dfd.edge('p9', 'analyst', label='Reports &\nInsights')
+
+# Identity Provider flows
+dfd.edge('p1', 'idp', label='Auth Request')
+dfd.edge('idp', 'p1', label='Auth Token')
+
+# External Services flows
+dfd.edge('p7', 'external_services', label='Notifications')
+dfd.edge('external_services', 'p7', label='Delivery\nStatus')
