@@ -145,3 +145,67 @@ dfd.edge('idp', 'p1', label='Auth Token')
 # External Services flows
 dfd.edge('p7', 'external_services', label='Notifications')
 dfd.edge('external_services', 'p7', label='Delivery\nStatus')
+
+# --- Inter-Process Flows (Purple) ---
+
+# Workflow Design → Execution
+dfd.edge('p2', 'p3', label='Published\nWorkflows', color=INTERPROCESS_COLOR, fontcolor=INTERPROCESS_FONT)
+
+# Request Lifecycle → Execution
+dfd.edge('p4', 'p3', label='New\nRequests', color=INTERPROCESS_COLOR, fontcolor=INTERPROCESS_FONT)
+
+# Execution ↔ Task Orchestration
+dfd.edge('p3', 'p5', label='Task\nTriggers', color=INTERPROCESS_COLOR, fontcolor=INTERPROCESS_FONT)
+dfd.edge('p5', 'p3', label='Task\nCompletion', color=INTERPROCESS_COLOR, fontcolor=INTERPROCESS_FONT)
+
+# Execution → Request Lifecycle
+dfd.edge('p3', 'p4', label='Status\nUpdates', color=INTERPROCESS_COLOR, fontcolor=INTERPROCESS_FONT)
+
+# Execution ↔ Rule Engine
+dfd.edge('p3', 'p6', label='Rule\nEvaluation', color=INTERPROCESS_COLOR, fontcolor=INTERPROCESS_FONT)
+dfd.edge('p6', 'p3', label='Routing\nDecisions', color=INTERPROCESS_COLOR, fontcolor=INTERPROCESS_FONT)
+
+# Task ↔ Rule Engine
+dfd.edge('p5', 'p6', label='Assignment\nRules', color=INTERPROCESS_COLOR, fontcolor=INTERPROCESS_FONT)
+dfd.edge('p6', 'p5', label='Assignments', color=INTERPROCESS_COLOR, fontcolor=INTERPROCESS_FONT)
+
+# Notification triggers
+dfd.edge('p5', 'p7', label='Notify\nTrigger', color=INTERPROCESS_COLOR, fontcolor=INTERPROCESS_FONT)
+dfd.edge('p3', 'p7', label='SLA\nBreaches', color=INTERPROCESS_COLOR, fontcolor=INTERPROCESS_FONT)
+
+# Audit logging
+dfd.edge('p1', 'p8', label='User\nEvents', color=INTERPROCESS_COLOR, fontcolor=INTERPROCESS_FONT)
+dfd.edge('p3', 'p8', label='Transitions', color=INTERPROCESS_COLOR, fontcolor=INTERPROCESS_FONT)
+dfd.edge('p5', 'p8', label='Task\nActions', color=INTERPROCESS_COLOR, fontcolor=INTERPROCESS_FONT)
+
+# Analytics
+dfd.edge('p8', 'p9', label='Log Data', color=INTERPROCESS_COLOR, fontcolor=INTERPROCESS_FONT)
+
+# --- Data Store Flows (Dashed) ---
+ds_style = {'style': 'dashed', 'color': DATASTORE_LINE_COLOR, 'fontcolor': '#1B5E20'}
+
+# D1: User & Organization Data
+dfd.edge('p1', 'd1', label='R/W', **ds_style)
+dfd.edge('p7', 'd1', label='Read', **ds_style)
+
+# D2: Workflow Definitions
+dfd.edge('p2', 'd2', label='R/W', **ds_style)
+dfd.edge('p3', 'd2', label='Read', **ds_style)
+
+# D3: Requests & Tasks
+dfd.edge('p3', 'd3', label='R/W', **ds_style)
+dfd.edge('p4', 'd3', label='R/W', **ds_style)
+dfd.edge('p5', 'd3', label='R/W', **ds_style)
+dfd.edge('p6', 'd3', label='Read', **ds_style)
+dfd.edge('p7', 'd3', label='Read', **ds_style)
+dfd.edge('p9', 'd3', label='Read', **ds_style)
+
+# D4: Audit Logs & Reports
+dfd.edge('p8', 'd4', label='Write', **ds_style)
+dfd.edge('p9', 'd4', label='Read', **ds_style)
+
+# D5: Business Rules
+dfd.edge('p2', 'd5', label='R/W', **ds_style)
+dfd.edge('p3', 'd5', label='Read', **ds_style)
+dfd.edge('p5', 'd5', label='Read', **ds_style)
+dfd.edge('p6', 'd5', label='Read', **ds_style)
