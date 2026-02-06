@@ -281,3 +281,25 @@ with dfd.subgraph() as s:
     s.attr(rank='same')
     s.node('d5')
     s.node('legend')
+
+# ===================== TITLE =====================
+dfd.attr(
+    label='\\n\\nLevel 1 Data Flow Diagram\\nBusiness Process Automation Platform\\n\\n',
+    labelloc='t',
+    fontsize='40',
+    fontname='Arial Bold',
+    fontcolor='#1A237E'
+)
+
+# ===================== RENDER =====================
+dfd.render('Level1_DFD', view=True, cleanup=True)
+print("=" * 60)
+print("✓ Level 1 DFD generated: Level1_DFD.png")
+print("=" * 60)
+print("Components:")
+print("  • 8 External Entities")
+print("  • 9 Subprocesses")
+print("  • 5 Data Stores")
+print("  • Straight ortho edges")
+print("  • Bigger text & more spacing")
+print("=" * 60)
