@@ -386,3 +386,70 @@ This document identifies the key classes, their attributes, methods, and visibil
 | getPendingCount() | public | Integer | Gets pending task count |
 
 ---
+
+## 5. Rule Engine Classes
+
+### 5.1 Rule
+**Purpose**: Represents a business rule.
+
+| Attribute | Type | Visibility | Description |
+|-----------|------|------------|-------------|
+| ruleId | String | private | Unique identifier |
+| name | String | private | Rule name |
+| description | String | private | Rule description |
+| conditionExpression | String | private | Condition logic |
+| priority | Integer | private | Evaluation priority |
+| isActive | Boolean | private | Whether rule is active |
+| organizationId | String | private | Parent organization |
+
+| Method | Visibility | Return Type | Description |
+|--------|------------|-------------|-------------|
+| create(name, condition) | public | Rule | Creates new rule |
+| update(data) | public | void | Updates rule |
+| delete() | public | void | Deletes rule |
+| evaluate(context) | public | Boolean | Evaluates rule against context |
+| validate() | public | ValidationResult | Validates rule syntax |
+| simulate(testContext) | public | SimulationResult | Simulates rule execution |
+
+---
+
+### 5.2 RuleEngine
+**Purpose**: Evaluates rules and enforces policies.
+
+| Attribute | Type | Visibility | Description |
+|-----------|------|------------|-------------|
+| rules | List\<Rule\> | private | Loaded rules |
+| organizationId | String | private | Organization context |
+
+| Method | Visibility | Return Type | Description |
+|--------|------------|-------------|-------------|
+| loadRules(orgId) | public | void | Loads rules for org |
+| evaluate(context) | public | RuleResult | Evaluates all applicable rules |
+| evaluateRule(ruleId, ctx) | public | Boolean | Evaluates single rule |
+| getApplicableRules(context) | protected | List\<Rule\> | Gets rules that apply |
+| executeChain(rules, ctx) | protected | RuleResult | Executes rule chain |
+| determineRouting(step, ctx) | public | Transition | Determines routing |
+
+---
+
+### 5.3 Policy
+**Purpose**: Defines organizational policies.
+
+| Attribute | Type | Visibility | Description |
+|-----------|------|------------|-------------|
+| policyId | String | private | Unique identifier |
+| name | String | private | Policy name |
+| type | PolicyType | private | SLA, Approval, Escalation |
+| rules | List\<Rule\> | private | Associated rules |
+| organizationId | String | private | Parent organization |
+| isEnforced | Boolean | private | Whether actively enforced |
+
+| Method | Visibility | Return Type | Description |
+|--------|------------|-------------|-------------|
+| create(name, type, rules) | public | Policy | Creates policy |
+| update(data) | public | void | Updates policy |
+| enforce(context) | public | PolicyResult | Enforces policy |
+| validate() | public | ValidationResult | Validates policy |
+
+---
+
