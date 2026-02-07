@@ -452,4 +452,87 @@ This document identifies the key classes, their attributes, methods, and visibil
 | validate() | public | ValidationResult | Validates policy |
 
 ---
+## 6. Notification & Escalation Classes
 
+### 6.1 Notification
+**Purpose**: Represents a notification to a user.
+
+| Attribute | Type | Visibility | Description |
+|-----------|------|------------|-------------|
+| notificationId | String | private | Unique identifier |
+| userId | String | private | Recipient user |
+| type | NotificationType | private | TaskAssigned, SLABreach, etc. |
+| channel | NotificationChannel | private | Email, InApp, SMS |
+| title | String | private | Notification title |
+| message | String | private | Notification body |
+| isRead | Boolean | private | Whether read by user |
+| createdAt | DateTime | private | Creation timestamp |
+| sentAt | DateTime | private | When notification was sent |
+
+| Method | Visibility | Return Type | Description |
+|--------|------------|-------------|-------------|
+| create(userId, type, msg) | public | Notification | Creates notification |
+| send() | public | void | Sends the notification |
+| markAsRead() | public | void | Marks as read |
+| getUser() | public | User | Gets recipient |
+
+---
+
+### 6.2 NotificationService
+**Purpose**: Manages notification delivery.
+
+| Attribute | Type | Visibility | Description |
+|-----------|------|------------|-------------|
+| emailProvider | EmailProvider | private | Email service provider |
+| smsProvider | SMSProvider | private | SMS service provider |
+| templates | Map\<String,Template\> | private | Notification templates |
+
+| Method | Visibility | Return Type | Description |
+|--------|------------|-------------|-------------|
+| sendEmail(notification) | public | void | Sends email notification |
+| sendSMS(notification) | public | void | Sends SMS notification |
+| sendInApp(notification) | public | void | Sends in-app notification |
+| notifyTaskAssignment(task) | public | void | Notifies of task assignment |
+| notifySLABreach(task) | public | void | Notifies of SLA breach |
+| notifyCompletion(request) | public | void | Notifies of request completion |
+| getTemplate(type) | protected | Template | Gets notification template |
+
+---
+
+### 6.3 EscalationPolicy
+**Purpose**: Defines escalation rules and actions.
+
+| Attribute | Type | Visibility | Description |
+|-----------|------|------------|-------------|
+| policyId | String | private | Unique identifier |
+| name | String | private | Policy name |
+| triggerCondition | String | private | When to trigger (SLA breach) |
+| escalationLevel | Integer | private | Level of escalation |
+| targetRoleId | String | private | Role to escalate to |
+| actions | List\<EscalationAction\> | private | Actions to take |
+
+| Method | Visibility | Return Type | Description |
+|--------|------------|-------------|-------------|
+| create(name, condition) | public | EscalationPolicy | Creates policy |
+| trigger(task) | public | void | Triggers escalation |
+| getNextLevel() | public | EscalationPolicy | Gets next escalation level |
+
+---
+
+### 6.4 EscalationEngine
+**Purpose**: Monitors and executes escalations.
+
+| Attribute | Type | Visibility | Description |
+|-----------|------|------------|-------------|
+| policies | List\<EscalationPolicy\> | private | Active policies |
+| scheduler | Scheduler | private | Job scheduler |
+
+| Method | Visibility | Return Type | Description |
+|--------|------------|-------------|-------------|
+| monitorTasks() | public | void | Monitors tasks for breaches |
+| checkSLA(task) | protected | Boolean | Checks if SLA breached |
+| executeEscalation(task, policy) | public | void | Executes escalation |
+| reassignTask(task, roleId) | protected | void | Reassigns task |
+| notifyStakeholders(task) | protected | void | Sends escalation notifications |
+
+---
