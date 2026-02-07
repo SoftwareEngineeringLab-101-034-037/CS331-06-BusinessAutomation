@@ -536,3 +536,71 @@ This document identifies the key classes, their attributes, methods, and visibil
 | notifyStakeholders(task) | protected | void | Sends escalation notifications |
 
 ---
+
+## 8. Analytics & Reporting Classes
+
+### 8.1 WorkflowMetrics
+**Purpose**: Stores workflow performance metrics.
+
+| Attribute | Type | Visibility | Description |
+|-----------|------|------------|-------------|
+| workflowId | String | private | Workflow identifier |
+| averageCompletionTime | Duration | private | Avg completion time |
+| slaComplianceRate | Float | private | SLA compliance percentage |
+| totalRequests | Integer | private | Total requests processed |
+| pendingRequests | Integer | private | Current pending count |
+| bottleneckSteps | List\<String\> | private | Identified bottlenecks |
+| periodStart | DateTime | private | Metrics period start |
+| periodEnd | DateTime | private | Metrics period end |
+
+| Method | Visibility | Return Type | Description |
+|--------|------------|-------------|-------------|
+| calculate(workflowId, period) | public | WorkflowMetrics | Calculates metrics |
+| getAverageTime() | public | Duration | Gets avg completion time |
+| getSLACompliance() | public | Float | Gets SLA compliance |
+| getBottlenecks() | public | List\<BottleneckInfo\> | Gets bottleneck details |
+| compareWith(otherMetrics) | public | Comparison | Compares metrics |
+
+---
+
+### 8.2 AnalyticsEngine
+**Purpose**: Processes analytics and generates insights.
+
+| Attribute | Type | Visibility | Description |
+|-----------|------|------------|-------------|
+| metricsRepository | MetricsRepo | private | Metrics storage |
+| mlModel | PredictionModel | private | ML model for predictions |
+
+| Method | Visibility | Return Type | Description |
+|--------|------------|-------------|-------------|
+| calculateMetrics(workflowId) | public | WorkflowMetrics | Calculates metrics |
+| detectBottlenecks(workflowId) | public | List\<Bottleneck\> | Detects bottlenecks |
+| predictSLAViolation(task) | public | Prediction | Predicts SLA violation |
+| detectAnomalies(workflowId) | public | List\<Anomaly\> | Detects anomalies |
+| generatePerformanceReport() | public | Report | Generates report |
+| getWorkloadDistribution() | public | Distribution | Gets workload dist |
+| recommendOptimizations() | public | List\<Recommendation\> | Gets recommendations |
+
+---
+
+### 8.3 SimulationEngine
+**Purpose**: Simulates workflows for digital twin functionality.
+
+| Attribute | Type | Visibility | Description |
+|-----------|------|------------|-------------|
+| simulationId | String | private | Unique identifier |
+| workflowId | String | private | Workflow being simulated |
+| parameters | SimulationParams | private | Simulation parameters |
+| results | SimulationResults | private | Simulation results |
+
+| Method | Visibility | Return Type | Description |
+|--------|------------|-------------|-------------|
+| configure(params) | public | void | Configures simulation |
+| run(iterations) | public | SimulationResults | Runs simulation |
+| generateSyntheticLoad(count) | protected | List\<Request\> | Generates synthetic requests |
+| predictDelays() | public | List\<Delay\> | Predicts execution delays |
+| predictResourceLoad() | public | ResourceForecast | Predicts resource usage |
+| validateSLAFeasibility() | public | SLAValidation | Validates SLA feasibility |
+| exportResults() | public | Report | Exports simulation results |
+
+---
