@@ -77,3 +77,45 @@ This document identifies the key classes, their attributes, methods, and visibil
 | getRequests() | public | List\<Request\> | Gets user's submitted requests |
 
 ---
+
+
+### 1.4 Role
+**Purpose**: Defines a role with specific permissions for RBAC.
+
+| Attribute | Type | Visibility | Description |
+|-----------|------|------------|-------------|
+| roleId | String | private | Unique identifier |
+| name | String | private | Role name (e.g., Manager, HR) |
+| description | String | private | Role description |
+| organizationId | String | private | Parent organization |
+| permissions | List\<Permission\> | private | Associated permissions |
+| isSystemRole | Boolean | private | Whether it's a system-defined role |
+
+| Method | Visibility | Return Type | Description |
+|--------|------------|-------------|-------------|
+| create(name, desc, orgId) | public | Role | Creates a new role |
+| update(name, desc) | public | void | Updates role info |
+| delete() | public | void | Deletes the role |
+| addPermission(perm) | public | void | Adds a permission |
+| removePermission(perm) | public | void | Removes a permission |
+| hasPermission(action) | public | Boolean | Checks if role has permission |
+| getUsers() | public | List\<User\> | Gets users with this role |
+
+---
+
+### 1.5 Permission
+**Purpose**: Represents a specific permission/capability.
+
+| Attribute | Type | Visibility | Description |
+|-----------|------|------------|-------------|
+| permissionId | String | private | Unique identifier |
+| name | String | private | Permission name |
+| resource | String | private | Resource being accessed |
+| action | String | private | Action type (read, write, delete) |
+
+| Method | Visibility | Return Type | Description |
+|--------|------------|-------------|-------------|
+| create(name, resource, action) | public | Permission | Creates permission |
+| matches(resource, action) | public | Boolean | Checks if permission matches |
+
+---
