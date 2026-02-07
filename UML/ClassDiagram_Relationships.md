@@ -308,3 +308,24 @@ This document identifies the key classes, their attributes, methods, and visibil
 | loadState() | protected | void | Loads state from storage |
 
 ---
+
+### 3.3 ExecutionContext
+**Purpose**: Holds runtime context for workflow execution.
+
+| Attribute | Type | Visibility | Description |
+|-----------|------|------------|-------------|
+| contextId | String | private | Unique identifier |
+| instanceId | String | private | Parent workflow instance |
+| variables | Map\<String,Object\> | private | Workflow variables |
+| requestData | JSON | private | Original request data |
+| stepHistory | List\<StepExecution\> | private | History of step executions |
+
+| Method | Visibility | Return Type | Description |
+|--------|------------|-------------|-------------|
+| getVariable(key) | public | Object | Gets a variable value |
+| setVariable(key, value) | public | void | Sets a variable |
+| getRequestData() | public | JSON | Gets request data |
+| addToHistory(stepExec) | public | void | Adds step to history |
+| getHistory() | public | List\<StepExecution\> | Gets step history |
+
+---
