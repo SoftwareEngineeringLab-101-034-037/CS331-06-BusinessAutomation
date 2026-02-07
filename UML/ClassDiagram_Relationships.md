@@ -174,3 +174,32 @@ This document identifies the key classes, their attributes, methods, and visibil
 | removeStep(stepId) | public | void | Removes a step |
 | getStartStep() | public | WorkflowStep | Gets initial step |
 | getVersionHistory() | public | List\<Workflow\> | Gets version history |
+
+
+### 2.2 WorkflowStep
+**Purpose**: Represents a single step in a workflow.
+
+| Attribute | Type | Visibility | Description |
+|-----------|------|------------|-------------|
+| stepId | String | private | Unique identifier |
+| workflowId | String | private | Parent workflow |
+| name | String | private | Step name |
+| description | String | private | Step description |
+| stepType | StepType | private | Approval, Action, Decision, Parallel |
+| sequence | Integer | private | Order in workflow |
+| assignedRoleId | String | private | Role responsible for step |
+| slaHours | Integer | private | SLA duration in hours |
+| isStartStep | Boolean | private | Whether it's the start step |
+| isEndStep | Boolean | private | Whether it's an end step |
+
+| Method | Visibility | Return Type | Description |
+|--------|------------|-------------|-------------|
+| create(workflowId, data) | public | WorkflowStep | Creates new step |
+| update(data) | public | void | Updates step configuration |
+| delete() | public | void | Deletes the step |
+| getTransitions() | public | List\<Transition\> | Gets outgoing transitions |
+| addTransition(trans) | public | void | Adds a transition |
+| getActions() | public | List\<StepAction\> | Gets available actions |
+| getAssignedRole() | public | Role | Gets assigned role |
+
+---
