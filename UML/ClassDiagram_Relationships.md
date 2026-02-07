@@ -203,3 +203,45 @@ This document identifies the key classes, their attributes, methods, and visibil
 | getAssignedRole() | public | Role | Gets assigned role |
 
 ---
+
+### 2.3 Transition
+**Purpose**: Defines transition between workflow steps.
+
+| Attribute | Type | Visibility | Description |
+|-----------|------|------------|-------------|
+| transitionId | String | private | Unique identifier |
+| fromStepId | String | private | Source step |
+| toStepId | String | private | Destination step |
+| triggerAction | String | private | Action that triggers (approve, reject) |
+| condition | Rule | private | Conditional routing rule |
+| priority | Integer | private | Priority for rule evaluation |
+
+| Method | Visibility | Return Type | Description |
+|--------|------------|-------------|-------------|
+| create(fromStep, toStep, action) | public | Transition | Creates transition |
+| update(data) | public | void | Updates transition |
+| delete() | public | void | Deletes transition |
+| setCondition(rule) | public | void | Sets conditional rule |
+| evaluate(context) | public | Boolean | Evaluates if transition is valid |
+
+---
+
+### 2.4 StepAction
+**Purpose**: Defines actions available at a workflow step.
+
+| Attribute | Type | Visibility | Description |
+|-----------|------|------------|-------------|
+| actionId | String | private | Unique identifier |
+| stepId | String | private | Parent step |
+| name | String | private | Action name (Approve, Reject, etc.) |
+| label | String | private | Display label |
+| requiresComment | Boolean | private | If comment is mandatory |
+| requiresAttachment | Boolean | private | If attachment is required |
+
+| Method | Visibility | Return Type | Description |
+|--------|------------|-------------|-------------|
+| create(stepId, name) | public | StepAction | Creates new action |
+| update(data) | public | void | Updates action config |
+| delete() | public | void | Deletes action |
+
+---
