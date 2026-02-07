@@ -666,3 +666,67 @@ This document identifies the key classes, their attributes, methods, and visibil
 | handleResponse(response) | protected | Object | Processes response |
 
 ---
+
+## 10. Supporting/Utility Classes
+
+### 10.1 Comment
+**Purpose**: Represents a comment on a request.
+
+| Attribute | Type | Visibility | Description |
+|-----------|------|------------|-------------|
+| commentId | String | private | Unique identifier |
+| requestId | String | private | Parent request |
+| userId | String | private | Author user ID |
+| content | String | private | Comment text |
+| createdAt | DateTime | private | Creation timestamp |
+
+| Method | Visibility | Return Type | Description |
+|--------|------------|-------------|-------------|
+| create(requestId, content) | public | Comment | Creates comment |
+| update(content) | public | void | Updates comment |
+| delete() | public | void | Deletes comment |
+
+---
+
+### 10.2 Attachment
+**Purpose**: Represents file attachments.
+
+| Attribute | Type | Visibility | Description |
+|-----------|------|------------|-------------|
+| attachmentId | String | private | Unique identifier |
+| requestId | String | private | Parent request |
+| fileName | String | private | Original file name |
+| fileSize | Long | private | File size in bytes |
+| mimeType | String | private | MIME type |
+| storagePath | String | private | Storage location |
+| uploadedBy | String | private | Uploader user ID |
+| uploadedAt | DateTime | private | Upload timestamp |
+
+| Method | Visibility | Return Type | Description |
+|--------|------------|-------------|-------------|
+| upload(requestId, file) | public | Attachment | Uploads file |
+| download() | public | File | Downloads file |
+| delete() | public | void | Deletes attachment |
+| getUrl() | public | String | Gets download URL |
+
+---
+
+### 10.3 TimelineEntry
+**Purpose**: Represents an entry in request timeline.
+
+| Attribute | Type | Visibility | Description |
+|-----------|------|------------|-------------|
+| entryId | String | private | Unique identifier |
+| requestId | String | private | Parent request |
+| eventType | String | private | Type of event |
+| description | String | private | Event description |
+| userId | String | private | User involved |
+| timestamp | DateTime | private | When event occurred |
+| metadata | JSON | private | Additional data |
+
+| Method | Visibility | Return Type | Description |
+|--------|------------|-------------|-------------|
+| create(requestId, event) | public | TimelineEntry | Creates entry |
+| getForRequest(requestId) | public | List\<TimelineEntry\> | Gets timeline |
+
+---
