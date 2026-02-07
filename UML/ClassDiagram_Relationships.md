@@ -26,3 +26,54 @@ This document identifies the key classes, their attributes, methods, and visibil
 | getDepartments() | public | List\<Department\> | Returns all departments |
 | addDepartment(dept) | public | void | Adds a new department |
 | getUsers() | public | List\<User\> | Returns all users in organization |
+
+### 1.2 Department
+**Purpose**: Represents a department within an organization.
+
+| Attribute | Type | Visibility | Description |
+|-----------|------|------------|-------------|
+| departmentId | String | private | Unique identifier |
+| name | String | private | Department name |
+| organizationId | String | private | Parent organization reference |
+| parentDepartmentId | String | private | For hierarchical structure |
+| createdAt | DateTime | private | Timestamp of creation |
+
+| Method | Visibility | Return Type | Description |
+|--------|------------|-------------|-------------|
+| create(name, orgId) | public | Department | Creates a new department |
+| update(name) | public | void | Updates department info |
+| delete() | public | void | Deletes the department |
+| getUsers() | public | List\<User\> | Returns users in department |
+| getSubDepartments() | public | List\<Department\> | Gets child departments |
+
+---
+
+### 1.3 User
+**Purpose**: Represents a user (employee, admin, etc.) in the system.
+
+| Attribute | Type | Visibility | Description |
+|-----------|------|------------|-------------|
+| userId | String | private | Unique identifier |
+| email | String | private | User email address |
+| passwordHash | String | private | Hashed password |
+| firstName | String | private | First name |
+| lastName | String | private | Last name |
+| organizationId | String | private | Parent organization |
+| departmentId | String | private | Associated department |
+| isActive | Boolean | private | Whether user is active |
+| createdAt | DateTime | private | Account creation timestamp |
+| lastLoginAt | DateTime | private | Last login timestamp |
+
+| Method | Visibility | Return Type | Description |
+|--------|------------|-------------|-------------|
+| register(email, password) | public | User | Registers a new user |
+| authenticate(email, password) | public | AuthToken | Authenticates user |
+| updateProfile(data) | public | void | Updates user profile |
+| deactivate() | public | void | Deactivates user account |
+| getRoles() | public | List\<Role\> | Gets assigned roles |
+| assignRole(role) | public | void | Assigns a role to user |
+| removeRole(role) | public | void | Removes a role from user |
+| getTasks() | public | List\<Task\> | Gets user's assigned tasks |
+| getRequests() | public | List\<Request\> | Gets user's submitted requests |
+
+---
