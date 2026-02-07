@@ -3,7 +3,7 @@ from graphviz import Digraph
 # Change format to 'svg' for svg
 OUT_FORMAT = 'png'
 
-dfd = Digraph('Level0_DFD_Pro', format=OUT_FORMAT)
+dfd = Digraph('Level0_DFD', format=OUT_FORMAT)
 
 # ===================== GRAPH SETTINGS =====================
 dfd.attr(
