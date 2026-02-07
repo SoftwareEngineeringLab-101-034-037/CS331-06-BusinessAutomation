@@ -142,3 +142,35 @@ This document identifies the key classes, their attributes, methods, and visibil
 | isExpired() | public | Boolean | Checks if session expired |
 
 ---
+
+## 2. Workflow Design & Configuration Classes
+
+### 2.1 Workflow
+**Purpose**: Represents a workflow definition/template.
+
+| Attribute | Type | Visibility | Description |
+|-----------|------|------------|-------------|
+| workflowId | String | private | Unique identifier |
+| name | String | private | Workflow name |
+| description | String | private | Workflow description |
+| organizationId | String | private | Owning organization |
+| version | Integer | private | Version number |
+| status | WorkflowStatus | private | Draft, Published, Archived |
+| inputSchema | JSONSchema | private | Input data validation schema |
+| createdBy | String | private | Creator user ID |
+| createdAt | DateTime | private | Creation timestamp |
+| publishedAt | DateTime | private | Publication timestamp |
+
+| Method | Visibility | Return Type | Description |
+|--------|------------|-------------|-------------|
+| create(name, desc, orgId) | public | Workflow | Creates new workflow |
+| update(data) | public | void | Updates workflow definition |
+| publish() | public | void | Publishes workflow |
+| archive() | public | void | Archives workflow |
+| clone() | public | Workflow | Clones workflow for new version |
+| validate() | public | ValidationResult | Validates workflow structure |
+| getSteps() | public | List\<WorkflowStep\> | Gets all workflow steps |
+| addStep(step) | public | void | Adds a step |
+| removeStep(stepId) | public | void | Removes a step |
+| getStartStep() | public | WorkflowStep | Gets initial step |
+| getVersionHistory() | public | List\<Workflow\> | Gets version history |
