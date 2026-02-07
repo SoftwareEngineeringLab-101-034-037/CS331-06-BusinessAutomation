@@ -329,3 +329,60 @@ This document identifies the key classes, their attributes, methods, and visibil
 | getHistory() | public | List\<StepExecution\> | Gets step history |
 
 ---
+
+## 4. Task Orchestration Classes
+
+### 4.1 Task
+**Purpose**: Represents a task assigned to a user.
+
+| Attribute | Type | Visibility | Description |
+|-----------|------|------------|-------------|
+| taskId | String | private | Unique identifier |
+| requestId | String | private | Parent request |
+| stepId | String | private | Workflow step that generated task |
+| assigneeId | String | private | Assigned user |
+| assignedRoleId | String | private | Role the task was assigned to |
+| status | TaskStatus | private | Pending, InProgress, Completed |
+| dueAt | DateTime | private | SLA deadline |
+| createdAt | DateTime | private | Task creation time |
+| completedAt | DateTime | private | Completion time |
+| decision | String | private | Decision made (approve/reject) |
+| comments | String | private | Task comments |
+
+| Method | Visibility | Return Type | Description |
+|--------|------------|-------------|-------------|
+| create(requestId, stepId) | public | Task | Creates new task |
+| assign(userId) | public | void | Assigns to user |
+| reassign(newUserId) | public | void | Reassigns task |
+| delegate(userId) | public | void | Delegates task |
+| complete(action, comment) | public | void | Completes the task |
+| escalate(reason) | public | void | Escalates the task |
+| isOverdue() | public | Boolean | Checks if past SLA |
+| getRequest() | public | Request | Gets parent request |
+| getStep() | public | WorkflowStep | Gets workflow step |
+| getAssignee() | public | User | Gets assigned user |
+| getAvailableActions() | public | List\<StepAction\> | Gets available actions |
+
+---
+
+### 4.2 TaskQueue
+**Purpose**: Manages task distribution and inbox.
+
+| Attribute | Type | Visibility | Description |
+|-----------|------|------------|-------------|
+| queueId | String | private | Unique identifier |
+| organizationId | String | private | Parent organization |
+| roleId | String | private | Associated role |
+| pendingTasks | List\<Task\> | private | Queue of pending tasks |
+
+| Method | Visibility | Return Type | Description |
+|--------|------------|-------------|-------------|
+| addTask(task) | public | void | Adds task to queue |
+| removeTask(taskId) | public | void | Removes task from queue |
+| getNextTask() | public | Task | Gets next task by priority |
+| getTasksByUser(userId) | public | List\<Task\> | Gets tasks for user |
+| getTasksByRole(roleId) | public | List\<Task\> | Gets tasks by role |
+| getOverdueTasks() | public | List\<Task\> | Gets overdue tasks |
+| getPendingCount() | public | Integer | Gets pending task count |
+
+---
