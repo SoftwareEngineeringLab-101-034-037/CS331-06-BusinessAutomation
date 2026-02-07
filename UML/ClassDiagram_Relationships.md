@@ -604,3 +604,65 @@ This document identifies the key classes, their attributes, methods, and visibil
 | exportResults() | public | Report | Exports simulation results |
 
 ---
+## 9. Integration Classes
+
+### 9.1 ExternalServiceConnector
+**Purpose**: Base class for external service integrations.
+
+| Attribute | Type | Visibility | Description |
+|-----------|------|------------|-------------|
+| connectorId | String | private | Unique identifier |
+| serviceType | String | protected | Type of service |
+| endpoint | String | protected | Service endpoint |
+| credentials | Credentials | private | Authentication credentials |
+| isConnected | Boolean | protected | Connection status |
+
+| Method | Visibility | Return Type | Description |
+|--------|------------|-------------|-------------|
+| connect() | public | void | Establishes connection |
+| disconnect() | public | void | Closes connection |
+| testConnection() | public | Boolean | Tests connectivity |
+| execute(action, params) | public | Response | Executes action |
+| handleError(error) | protected | void | Handles errors |
+
+---
+
+### 9.2 WebhookHandler
+**Purpose**: Handles incoming webhooks.
+
+| Attribute | Type | Visibility | Description |
+|-----------|------|------------|-------------|
+| handlerId | String | private | Unique identifier |
+| endpoint | String | private | Webhook endpoint URL |
+| secretKey | String | private | Validation secret |
+| eventMappings | Map\<String,Handler\> | private | Event to handler mapping |
+
+| Method | Visibility | Return Type | Description |
+|--------|------------|-------------|-------------|
+| register(endpoint) | public | String | Registers webhook endpoint |
+| validateSignature(req) | protected | Boolean | Validates request signature |
+| processEvent(event) | public | void | Processes webhook event |
+| triggerWorkflow(eventData) | public | Request | Triggers workflow from event |
+
+---
+
+### 9.3 APIConnector
+**Purpose**: Makes outbound REST API calls.
+
+| Attribute | Type | Visibility | Description |
+|-----------|------|------------|-------------|
+| baseUrl | String | private | Base API URL |
+| authToken | String | private | Authentication token |
+| timeout | Integer | private | Request timeout |
+| retryPolicy | RetryPolicy | private | Retry configuration |
+
+| Method | Visibility | Return Type | Description |
+|--------|------------|-------------|-------------|
+| get(path, params) | public | Response | Makes GET request |
+| post(path, body) | public | Response | Makes POST request |
+| put(path, body) | public | Response | Makes PUT request |
+| delete(path) | public | Response | Makes DELETE request |
+| setAuthHeader(token) | protected | void | Sets auth header |
+| handleResponse(response) | protected | Object | Processes response |
+
+---
