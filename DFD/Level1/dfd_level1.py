@@ -1,305 +1,283 @@
 from graphviz import Digraph
 
-# Create Level 1 DFD
-dfd = Digraph('Level1_DFD', format='png')
+OUT_FORMAT = 'png'
+OUTPUT_NAME = 'Level1_DFD'
 
-# ===================== GRAPH SETTINGS =====================
+dfd = Digraph('Level1_DFD', format=OUT_FORMAT)
+
+# ===================== GLOBAL GRAPH SETTINGS =====================
 dfd.attr(
     rankdir='TB',
-    size='50,40!',           # BIGGER canvas
+    size='60,50!',
     dpi='300',
     bgcolor='#FFFFFF',
-    pad='2.0',
-    nodesep='1.8',           # MORE horizontal spacing
-    ranksep='2.2',           # MORE vertical spacing
-    splines='ortho'          # STRAIGHT EDGES - keeping as requested
+    pad='1.5',
+    nodesep='2.0',
+    ranksep='2.0',
+    splines='ortho',
+    forcelabels='true',
+    outputorder='edgesfirst',
+)
+dfd.attr('edge',
+    fontname='Arial',
+    fontsize='14',
+    penwidth='2',
+    color='#424242',
 )
 
-# ===================== STYLING =====================
-
-# External entities (users) - Blue boxes - BIGGER TEXT
+# ===================== STYLES =====================
 user_style = {
     'shape': 'box',
     'style': 'filled,rounded',
     'fillcolor': '#E3F2FD',
     'color': '#1976D2',
-    'penwidth': '3',
+    'penwidth': '2.5',
     'fontname': 'Arial Bold',
-    'fontsize': '32',        # EVEN BIGGER
-    'fontcolor': '#0D47A1'
+    'fontsize': '15',
+    'fontcolor': '#0D47A1',
 }
 
-# External systems - Pink boxes - BIGGER TEXT
 ext_system_style = {
     'shape': 'box',
     'style': 'filled,rounded',
     'fillcolor': '#FCE4EC',
     'color': '#C2185B',
-    'penwidth': '3',
+    'penwidth': '2.5',
     'fontname': 'Arial Bold',
-    'fontsize': '32',        # EVEN BIGGER
-    'fontcolor': '#880E4F'
+    'fontsize': '15',
+    'fontcolor': '#880E4F',
 }
 
-# Subprocesses - Yellow circles - BIGGER TEXT
 process_style = {
     'shape': 'circle',
     'style': 'filled',
     'fillcolor': '#FFF9C4',
     'color': '#F57F17',
-    'penwidth': '4',
+    'penwidth': '3',
     'fontname': 'Arial Bold',
-    'fontsize': '20',        # EVEN BIGGER
-    'fontcolor': '#E65100'
+    'fontsize': '12',
+    'fixedsize': 'true',
+    'width': '1.8',
+    'height': '1.8',
 }
 
-# Data stores - Green boxes - BIGGER TEXT
 datastore_style = {
     'shape': 'box',
     'style': 'filled',
     'fillcolor': '#E8F5E9',
     'color': '#2E7D32',
-    'penwidth': '3',
+    'penwidth': '2.5',
     'fontname': 'Arial Bold',
-    'fontsize': '32',        # EVEN BIGGER
-    'fontcolor': '#1B5E20'
+    'fontsize': '13',
+    'fontcolor': '#1B5E20',
 }
 
-# Edge styling - BIGGER LABELS
-dfd.attr('edge', fontname='Arial Bold', fontsize='18', penwidth='2.5', color='#424242', fontcolor='#212121')
-
-# Colors
-DATASTORE_LINE_COLOR = '#6A1B9A'
-INTERPROCESS_COLOR = '#7B1FA2'
-INTERPROCESS_FONT = '#4A148C'
+ds_edge = {'style': 'dashed', 'color': '#1B5E20', 'fontcolor': '#1B5E20'}
+IP_COLOR = '#7B1FA2'
+IP_FONT = '#4A148C'
 
 # ===================== EXTERNAL ENTITIES =====================
+dfd.node('org_admin',    'Organization\nAdmin',                      **user_style, width='2.4', height='0.9')
+dfd.node('admin',        'Admin',                                    **user_style, width='2.0', height='0.9')
+dfd.node('new_employee', 'New\nEmployee',                            **user_style, width='2.0', height='0.9')
+dfd.node('employee',     'Employee',                                 **user_style, width='2.0', height='0.9')
+dfd.node('analyst',      'Analyst',                                  **user_style, width='2.0', height='0.9')
+dfd.node('idp',          'Identity Provider\n(IdP)',                  **ext_system_style, width='2.6', height='0.9')
+dfd.node('auth_svc',     'Authentication\nService',                  **ext_system_style, width='2.6', height='0.9')
+dfd.node('ext_svc',      'External Services\n(Email / SMS / Calendar)', **ext_system_style, width='3.6', height='0.9')
 
-# User entities - BIGGER nodes
-dfd.node('org_admin', 'Organization\nAdmin', **user_style, width='3.2', height='1.6')
-dfd.node('admin', 'Admin', **user_style, width='2.8', height='1.6')
-dfd.node('employee', 'Employee', **user_style, width='2.8', height='1.6')
-dfd.node('manager', 'Manager', **user_style, width='2.8', height='1.6')
-dfd.node('new_employee', 'New\nEmployee', **user_style, width='2.8', height='1.6')
-dfd.node('analyst', 'Analyst', **user_style, width='2.8', height='1.6')
+# ===================== PROCESSES =====================
+processes = [
+    ('p1', '1.0\nOrg & User\nMgmt'),
+    ('p2', '2.0\nWorkflow\nDesign'),
+    ('p3', '3.0\nWorkflow\nExecution'),
+    ('p4', '4.0\nRequest\nLifecycle'),
+    ('p5', '5.0\nTask\nOrchestration'),
+    ('p6', '6.0\nRule\nEngine'),
+    ('p7', '7.0\nNotification\nEngine'),
+    ('p8', '8.0\nAudit &\nCompliance'),
+    ('p9', '9.0\nAnalytics\n& Reporting'),
+]
 
-# External Systems - BIGGER nodes
-dfd.node('idp', 'Identity\nProvider', **ext_system_style, width='3.2', height='1.6')
-dfd.node('external_services', 'External Services\n(Email/SMS/Zoom)', **ext_system_style, width='4.5', height='1.6')
+# ===================== DATA STORES =====================
+datastores = [
+    ('d1', 'D1 | User & Org Data'),
+    ('d2', 'D2 | Workflow Defs'),
+    ('d3', 'D3 | Requests & Tasks'),
+    ('d4', 'D4 | Audit Logs'),
+    ('d5', 'D5 | Business Rules'),
+]
 
-# ===================== SUBPROCESSES (1.0 - 9.0) - BIGGER =====================
-
-dfd.node('p1', '1.0\n──────────\nOrganization\n& User\nManagement', **process_style, width='2.8', height='2.8', fixedsize='true')
-dfd.node('p2', '2.0\n──────────\nWorkflow\nDesign &\nConfig', **process_style, width='2.8', height='2.8', fixedsize='true')
-dfd.node('p3', '3.0\n──────────\nWorkflow\nExecution\nEngine', **process_style, width='2.8', height='2.8', fixedsize='true')
-dfd.node('p4', '4.0\n──────────\nRequest\nLifecycle\nMgmt', **process_style, width='2.8', height='2.8', fixedsize='true')
-dfd.node('p5', '5.0\n──────────\nTask\nOrchestration\n& Assignment', **process_style, width='2.8', height='2.8', fixedsize='true')
-dfd.node('p6', '6.0\n──────────\nRule Engine\n& Policy\nEnforcement', **process_style, width='2.8', height='2.8', fixedsize='true')
-dfd.node('p7', '7.0\n──────────\nNotification\n& Escalation\nEngine', **process_style, width='2.8', height='2.8', fixedsize='true')
-dfd.node('p8', '8.0\n──────────\nAudit &\nCompliance\nMgmt', **process_style, width='2.8', height='2.8', fixedsize='true')
-dfd.node('p9', '9.0\n──────────\nAnalytics\n& Reporting', **process_style, width='2.8', height='2.8', fixedsize='true')
-
-# ===================== DATA STORES - BIGGER =====================
-
-dfd.node('d1', 'D1 | User & Organization Data', **datastore_style, width='6.5', height='1.2')
-dfd.node('d2', 'D2 | Workflow Definitions', **datastore_style, width='6.0', height='1.2')
-dfd.node('d3', 'D3 | Requests & Tasks', **datastore_style, width='6.0', height='1.2')
-dfd.node('d4', 'D4 | Audit Logs & Reports', **datastore_style, width='6.0', height='1.2')
-dfd.node('d5', 'D5 | Business Rules', **datastore_style, width='5.5', height='1.2')
-
-# ===================== DATA FLOWS =====================
-
-# --- External Entity → Process Flows ---
-
-# Organization Admin flows
-dfd.edge('org_admin', 'p1', label='User Config')
-dfd.edge('p1', 'org_admin', label='Confirmation')
-dfd.edge('org_admin', 'p2', label='Workflow\nDesign')
-
-# Admin flows
-dfd.edge('admin', 'p2', label='Workflow/Rule\nConfig')
-dfd.edge('admin', 'p5', label='Manual\nAssignment')
-
-# New Employee flows
-dfd.edge('new_employee', 'p1', label='Join Request')
-dfd.edge('p1', 'new_employee', label='Onboarding')
-
-# Employee flows
-dfd.edge('employee', 'p4', label='Submit\nRequest')
-dfd.edge('p4', 'employee', label='Request\nStatus')
-dfd.edge('p5', 'employee', label='Tasks')
-dfd.edge('employee', 'p5', label='Task\nActions')
-
-# Manager flows
-dfd.edge('p5', 'manager', label='Pending\nTasks')
-dfd.edge('manager', 'p5', label='Approvals')
-
-# Analyst flows
-dfd.edge('analyst', 'p9', label='Queries')
-dfd.edge('p9', 'analyst', label='Reports &\nInsights')
-
-# Identity Provider flows
-dfd.edge('p1', 'idp', label='Auth Request')
-dfd.edge('idp', 'p1', label='Auth Token')
-
-# External Services flows
-dfd.edge('p7', 'external_services', label='Notifications')
-dfd.edge('external_services', 'p7', label='Delivery\nStatus')
-
-# --- Inter-Process Flows (Purple) ---
-
-# Workflow Design → Execution
-dfd.edge('p2', 'p3', label='Published\nWorkflows', color=INTERPROCESS_COLOR, fontcolor=INTERPROCESS_FONT)
-
-# Request Lifecycle → Execution
-dfd.edge('p4', 'p3', label='New\nRequests', color=INTERPROCESS_COLOR, fontcolor=INTERPROCESS_FONT)
-
-# Execution ↔ Task Orchestration
-dfd.edge('p3', 'p5', label='Task\nTriggers', color=INTERPROCESS_COLOR, fontcolor=INTERPROCESS_FONT)
-dfd.edge('p5', 'p3', label='Task\nCompletion', color=INTERPROCESS_COLOR, fontcolor=INTERPROCESS_FONT)
-
-# Execution → Request Lifecycle
-dfd.edge('p3', 'p4', label='Status\nUpdates', color=INTERPROCESS_COLOR, fontcolor=INTERPROCESS_FONT)
-
-# Execution ↔ Rule Engine
-dfd.edge('p3', 'p6', label='Rule\nEvaluation', color=INTERPROCESS_COLOR, fontcolor=INTERPROCESS_FONT)
-dfd.edge('p6', 'p3', label='Routing\nDecisions', color=INTERPROCESS_COLOR, fontcolor=INTERPROCESS_FONT)
-
-# Task ↔ Rule Engine
-dfd.edge('p5', 'p6', label='Assignment\nRules', color=INTERPROCESS_COLOR, fontcolor=INTERPROCESS_FONT)
-dfd.edge('p6', 'p5', label='Assignments', color=INTERPROCESS_COLOR, fontcolor=INTERPROCESS_FONT)
-
-# Notification triggers
-dfd.edge('p5', 'p7', label='Notify\nTrigger', color=INTERPROCESS_COLOR, fontcolor=INTERPROCESS_FONT)
-dfd.edge('p3', 'p7', label='SLA\nBreaches', color=INTERPROCESS_COLOR, fontcolor=INTERPROCESS_FONT)
-
-# Audit logging
-dfd.edge('p1', 'p8', label='User\nEvents', color=INTERPROCESS_COLOR, fontcolor=INTERPROCESS_FONT)
-dfd.edge('p3', 'p8', label='Transitions', color=INTERPROCESS_COLOR, fontcolor=INTERPROCESS_FONT)
-dfd.edge('p5', 'p8', label='Task\nActions', color=INTERPROCESS_COLOR, fontcolor=INTERPROCESS_FONT)
-
-# Analytics
-dfd.edge('p8', 'p9', label='Log Data', color=INTERPROCESS_COLOR, fontcolor=INTERPROCESS_FONT)
-
-# --- Data Store Flows (Dashed) ---
-ds_style = {'style': 'dashed', 'color': DATASTORE_LINE_COLOR, 'fontcolor': '#1B5E20'}
-
-# D1: User & Organization Data
-dfd.edge('p1', 'd1', label='R/W', **ds_style)
-dfd.edge('p7', 'd1', label='Read', **ds_style)
-
-# D2: Workflow Definitions
-dfd.edge('p2', 'd2', label='R/W', **ds_style)
-dfd.edge('p3', 'd2', label='Read', **ds_style)
-
-# D3: Requests & Tasks
-dfd.edge('p3', 'd3', label='R/W', **ds_style)
-dfd.edge('p4', 'd3', label='R/W', **ds_style)
-dfd.edge('p5', 'd3', label='R/W', **ds_style)
-dfd.edge('p6', 'd3', label='Read', **ds_style)
-dfd.edge('p7', 'd3', label='Read', **ds_style)
-dfd.edge('p9', 'd3', label='Read', **ds_style)
-
-# D4: Audit Logs & Reports
-dfd.edge('p8', 'd4', label='Write', **ds_style)
-dfd.edge('p9', 'd4', label='Read', **ds_style)
-
-# D5: Business Rules
-dfd.edge('p2', 'd5', label='R/W', **ds_style)
-dfd.edge('p3', 'd5', label='Read', **ds_style)
-dfd.edge('p5', 'd5', label='Read', **ds_style)
-dfd.edge('p6', 'd5', label='Read', **ds_style)
+# ===================== VALIDATION BOOKKEEPING =====================
+_inbound  = {pid: set() for pid, _ in processes}
+_outbound = {pid: set() for pid, _ in processes}
 
 
+def add_edge(a, b, **kwargs):
+    label = kwargs.pop('label', None)
+    if label is not None:
+        dfd.edge(a, b, xlabel=label, **kwargs)
+    else:
+        dfd.edge(a, b, **kwargs)
+    if a in _outbound:
+        _outbound[a].add(b)
+    if b in _inbound:
+        _inbound[b].add(a)
 
-# ===================== LAYOUT GROUPING =====================
 
-# Users left column
+# ===================== SYSTEM BOUNDARY CLUSTER =====================
+with dfd.subgraph(name='cluster_system') as c:
+    c.attr(
+        label='System Boundary — Business Process Automation Platform',
+        labelloc='t', fontsize='14', fontname='Arial Bold',
+        color='#BDBDBD', style='rounded,filled', fillcolor='#FAFAFA', penwidth='2',
+        margin='20',
+    )
+    for pid, plabel in processes:
+        c.node(pid, plabel, **process_style)
+    for dsid, dslabel in datastores:
+        c.node(dsid, dslabel, **datastore_style, width='3.0', height='0.8')
+
+    # Rank tiers inside cluster
+    with c.subgraph() as r:
+        r.attr(rank='same')
+        r.node('p1'); r.node('p2')
+    with c.subgraph() as r:
+        r.attr(rank='same')
+        r.node('p3'); r.node('p4')
+    with c.subgraph() as r:
+        r.attr(rank='same')
+        r.node('p5'); r.node('p6')
+    with c.subgraph() as r:
+        r.attr(rank='same')
+        r.node('p7'); r.node('p8'); r.node('p9')
+    with c.subgraph() as r:
+        r.attr(rank='same')
+        r.node('d1'); r.node('d2'); r.node('d3'); r.node('d4'); r.node('d5')
+
+    # Invisible ordering within tiers (skip pairs with real edges)
+    c.edge('p1', 'p2', style='invis')
+    c.edge('p3', 'p4', style='invis')
+    c.edge('p7', 'p8', style='invis')
+    c.edge('d1', 'd2', style='invis')
+    c.edge('d2', 'd3', style='invis')
+    c.edge('d3', 'd4', style='invis')
+    c.edge('d4', 'd5', style='invis')
+
+# ===================== EXTERNAL <-> PROCESS EDGES =====================
+add_edge('org_admin', 'p1', label='User Config', weight='8')
+add_edge('p1', 'org_admin', label='Confirmation', constraint='false')
+add_edge('org_admin', 'p2', headlabel='Workflow Design', labeldistance='7', labelangle='12')
+
+add_edge('admin', 'p2', headlabel='Workflow/Rule Config', weight='8', labeldistance='7', labelangle='12')
+add_edge('p2', 'admin', taillabel='Published Status', constraint='false', labeldistance='7', labelangle='12')
+add_edge('admin', 'p5', label='Manual Assign')
+
+add_edge('new_employee', 'p1', label='Join Request', weight='8')
+add_edge('p1', 'new_employee', label='Onboarding', constraint='false')
+
+add_edge('employee', 'p4', taillabel='Submit Request', weight='8', labeldistance='7', labelangle='45')
+add_edge('p4', 'employee', taillabel='Request Status', constraint='false', labeldistance='10', labelangle='-5')
+add_edge('employee', 'p5', taillabel='Task Actions', labeldistance='14', labelangle='80')
+add_edge('p5', 'employee', headlabel='Tasks', constraint='false', labeldistance='6', labelangle='-10')
+
+add_edge('analyst', 'p9', label='Queries', weight='8')
+add_edge('p9', 'analyst', label='Reports', constraint='false')
+
+add_edge('p1', 'idp', label='Auth Request')
+add_edge('idp', 'p1', label='Auth Token', constraint='false')
+
+add_edge('p7', 'ext_svc', label='Notifications')
+add_edge('ext_svc', 'p7', label='Delivery Status', constraint='false')
+
+add_edge('p1', 'auth_svc', taillabel='Session Token / Access Decision', labeldistance='10', labelangle='-5')
+add_edge('auth_svc', 'p1', headlabel='Session / Access Request', constraint='false', labeldistance='10', labelangle='-5')
+
+# ===================== INTER-PROCESS FLOWS =====================
+# Downward (constraining skeleton)
+add_edge('p2', 'p3', label='Published Workflows',  color=IP_COLOR, fontcolor=IP_FONT, weight='5')
+add_edge('p3', 'p5', label='Task Triggers',         color=IP_COLOR, fontcolor=IP_FONT, weight='5')
+add_edge('p5', 'p7', label='Notify Trigger',        color=IP_COLOR, fontcolor=IP_FONT, weight='5')
+add_edge('p3', 'p7', label='SLA Breaches',          color=IP_COLOR, fontcolor=IP_FONT)
+add_edge('p1', 'p8', label='User Events',           color=IP_COLOR, fontcolor=IP_FONT)
+add_edge('p3', 'p8', taillabel='Transitions',           color=IP_COLOR, fontcolor=IP_FONT, labeldistance='6', labelangle='-12')
+add_edge('p5', 'p8', label='Task Actions',          color=IP_COLOR, fontcolor=IP_FONT)
+add_edge('p8', 'p9', label='Log Data',              color=IP_COLOR, fontcolor=IP_FONT, weight='5')
+add_edge('p3', 'p6', taillabel='Rule Evaluation',       color=IP_COLOR, fontcolor=IP_FONT, labeldistance='10', labelangle='-4')
+
+# Lateral / backward (non-constraining)
+add_edge('p4', 'p3', label='New Requests',      color=IP_COLOR, fontcolor=IP_FONT, constraint='false')
+add_edge('p3', 'p4', label='Status Updates',    color=IP_COLOR, fontcolor=IP_FONT, constraint='false')
+add_edge('p5', 'p3', label='Task Completion',   color=IP_COLOR, fontcolor=IP_FONT, constraint='false')
+add_edge('p6', 'p3', label='Routing Decisions', color=IP_COLOR, fontcolor=IP_FONT, constraint='false')
+add_edge('p5', 'p6', label='Assignment Rules',  color=IP_COLOR, fontcolor=IP_FONT, constraint='false')
+add_edge('p6', 'p5', label='Assignments',       color=IP_COLOR, fontcolor=IP_FONT, constraint='false')
+
+# ===================== DATA STORE ACCESS =====================
+add_edge('p1', 'd1', taillabel='R/W', minlen='2', labeldistance='35', labelangle='2', **ds_edge)
+add_edge('p7', 'd1', label='Read', **ds_edge)
+
+add_edge('p2', 'd2', label='R/W', minlen='2', **ds_edge)
+add_edge('p3', 'd2', taillabel='Read', labeldistance='35', labelangle='2', **ds_edge)
+
+add_edge('p3', 'd3', label='R/W',  **ds_edge)
+add_edge('p4', 'd3', label='R/W',  **ds_edge)
+add_edge('p5', 'd3', label='R/W',  **ds_edge)
+add_edge('p6', 'd3', label='Read', **ds_edge)
+add_edge('p7', 'd3', label='Read', constraint='false', **ds_edge)
+add_edge('p9', 'd3', label='Read', constraint='false', **ds_edge)
+
+add_edge('p8', 'd4', label='Write', **ds_edge)
+add_edge('p9', 'd4', taillabel='Read', labeldistance='7', labelangle='15',  **ds_edge)
+
+add_edge('p2', 'd5', label='R/W',  **ds_edge)
+add_edge('p6', 'd5', taillabel='Read', labeldistance='7', labelangle='15', **ds_edge)
+add_edge('p3', 'd5', label='Read', constraint='false', **ds_edge)
+add_edge('p5', 'd5', label='Read', constraint='false', **ds_edge)
+
+# ===================== EXTERNAL ENTITY RANKS =====================
 with dfd.subgraph() as s:
     s.attr(rank='same')
-    s.node('org_admin')
-    s.node('new_employee')
+    s.node('new_employee'); s.node('idp'); s.node('auth_svc')
+    s.node('org_admin'); s.node('admin'); s.node('employee')
 
 with dfd.subgraph() as s:
     s.attr(rank='same')
-    s.node('employee')
-    s.node('manager')
-    s.node('analyst')
+    s.node('ext_svc'); s.node('analyst')
 
-# External systems right column
-with dfd.subgraph() as s:
-    s.attr(rank='same')
-    s.node('external_services')
-    s.node('idp')
+dfd.edge('new_employee', 'idp', style='invis')
+dfd.edge('idp', 'auth_svc', style='invis')
+dfd.edge('auth_svc', 'org_admin', style='invis')
+dfd.edge('org_admin', 'admin', style='invis')
+dfd.edge('admin', 'employee', style='invis')
 
-# Process row 1
-with dfd.subgraph() as s:
-    s.attr(rank='same')
-    s.node('p1')
-    s.node('p2')
+dfd.edge('new_employee', 'ext_svc', style='invis')
+dfd.edge('ext_svc', 'analyst', style='invis')
 
-# Process row 2 (core)
-with dfd.subgraph() as s:
-    s.attr(rank='same')
-    s.node('p3')
-    s.node('p4')
-    s.node('p5')
-    s.node('p6')
-
-# Process row 3
-with dfd.subgraph() as s:
-    s.attr(rank='same')
-    s.node('p7')
-    s.node('p8')
-    s.node('p9')
-
-# Data stores at bottom
-with dfd.subgraph() as s:
-    s.attr(rank='same')
-    s.node('d1')
-    s.node('d2')
-    s.node('d3')
-    s.node('d4')
-    s.node('d5')
-
-# ===================== LEGEND =====================
+# ===================== LEGEND & TITLE =====================
 legend_text = (
     "LEGEND\\n"
-    "═════════════════════════════════\\n"
-    "Blue Box = User (External Entity)\\n"
+    "──────────────────\\n"
+    "Blue Box = External User\\n"
     "Pink Box = External System\\n"
-    "Yellow Circle = Subprocess\\n"
+    "Yellow Circle = Internal Process\\n"
     "Green Box = Data Store\\n"
-    "═════════════════════════════════\\n"
-    "Solid Line = Data Flow\\n"
-    "Purple Line = Inter-Process Flow\\n"
-    "Dashed Line = Data Store Access\\n"
+    "Green Dashed Line = Data Store Access\\n"
+    "Purple Solid Line = Inter-process Flow\\n"
 )
-dfd.node('legend', legend_text, shape='plaintext', fontsize='18', fontname='Arial Bold')
+dfd.node('legend', legend_text,
+    shape='box', style='filled,rounded',
+    fillcolor='#F5F5F5', color='#9E9E9E', penwidth='2',
+    fontsize='14', fontname='Arial',
+)
 
-with dfd.subgraph() as s:
-    s.attr(rank='same')
-    s.node('d5')
-    s.node('legend')
-
-# ===================== TITLE =====================
 dfd.attr(
-    label='\\n\\nLevel 1 Data Flow Diagram\\nBusiness Process Automation Platform\\n\\n',
+    label='\\nLevel 1 Data Flow Diagram — Business Process Automation Platform\\n',
     labelloc='t',
-    fontsize='40',
+    fontsize='20',
     fontname='Arial Bold',
-    fontcolor='#1A237E'
 )
 
 # ===================== RENDER =====================
-dfd.render('Level1_DFD', view=True, cleanup=True)
-print("=" * 60)
-print("✓ Level 1 DFD generated: Level1_DFD.png")
-print("=" * 60)
-print("Components:")
-print("  • 8 External Entities")
-print("  • 9 Subprocesses")
-print("  • 5 Data Stores")
-print("  • Straight ortho edges")
-print("  • Bigger text & more spacing")
-print("=" * 60)
+outpath = dfd.render(OUTPUT_NAME, cleanup=True)
+print("✓ Diagram generated:", outpath)
