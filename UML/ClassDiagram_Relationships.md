@@ -119,3 +119,26 @@ This document identifies the key classes, their attributes, methods, and visibil
 | matches(resource, action) | public | Boolean | Checks if permission matches |
 
 ---
+
+### 1.6 Session
+**Purpose**: Manages user authentication sessions.
+
+| Attribute | Type | Visibility | Description |
+|-----------|------|------------|-------------|
+| sessionId | String | private | Unique session identifier |
+| userId | String | private | Associated user |
+| token | String | private | JWT or session token |
+| createdAt | DateTime | private | Session creation time |
+| expiresAt | DateTime | private | Session expiration time |
+| ipAddress | String | private | Client IP address |
+| isValid | Boolean | private | Whether session is valid |
+
+| Method | Visibility | Return Type | Description |
+|--------|------------|-------------|-------------|
+| create(userId) | public | Session | Creates new session |
+| validate(token) | public | Boolean | Validates session token |
+| refresh() | public | Session | Refreshes session |
+| invalidate() | public | void | Invalidates/logs out session |
+| isExpired() | public | Boolean | Checks if session expired |
+
+---
