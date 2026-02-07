@@ -245,3 +245,66 @@ This document identifies the key classes, their attributes, methods, and visibil
 | delete() | public | void | Deletes action |
 
 ---
+
+## 3. Workflow Execution Engine Classes
+
+### 3.1 Request
+**Purpose**: Represents a workflow instance/execution.
+
+| Attribute | Type | Visibility | Description |
+|-----------|------|------------|-------------|
+| requestId | String | private | Unique identifier |
+| workflowId | String | private | Source workflow |
+| requesterId | String | private | User who submitted request |
+| currentStepId | String | private | Current active step |
+| status | RequestStatus | private | Pending, InProgress, Completed, Cancelled |
+| inputData | JSON | private | Request input data |
+| createdAt | DateTime | private | Submission timestamp |
+| completedAt | DateTime | private | Completion timestamp |
+| priority | Priority | private | Request priority level |
+
+| Method | Visibility | Return Type | Description |
+|--------|------------|-------------|-------------|
+| submit(workflowId, data) | public | Request | Submits new request |
+| cancel(reason) | public | void | Cancels the request |
+| reopen() | public | void | Reopens cancelled request |
+| getStatus() | public | RequestStatus | Gets current status |
+| getCurrentStep() | public | WorkflowStep | Gets current step |
+| getTimeline() | public | List\<TimelineEntry\> | Gets execution timeline |
+| getTasks() | public | List\<Task\> | Gets all generated tasks |
+| addComment(comment) | public | void | Adds a comment |
+| addAttachment(file) | public | void | Adds an attachment |
+| getComments() | public | List\<Comment\> | Gets all comments |
+| getAttachments() | public | List\<Attachment\> | Gets all attachments |
+
+---
+
+### 3.2 WorkflowInstance
+**Purpose**: Manages the execution state of a workflow.
+
+| Attribute | Type | Visibility | Description |
+|-----------|------|------------|-------------|
+| instanceId | String | private | Unique identifier |
+| requestId | String | private | Associated request |
+| workflowId | String | private | Workflow definition |
+| state | ExecutionState | private | Current execution state |
+| context | ExecutionContext | private | Execution context data |
+| startedAt | DateTime | private | Execution start time |
+| isRunning | Boolean | private | Whether currently executing |
+| parallelBranches | List\<Branch\> | private | Active parallel branches |
+
+| Method | Visibility | Return Type | Description |
+|--------|------------|-------------|-------------|
+| start(requestId) | public | void | Starts workflow execution |
+| pause() | public | void | Pauses execution |
+| resume() | public | void | Resumes execution |
+| transitionTo(stepId) | public | void | Moves to next step |
+| executeStep(stepId) | public | void | Executes a step |
+| handleEvent(event) | public | void | Processes workflow event |
+| synchronizeBranches() | protected | void | Syncs parallel branches |
+| evaluateConditions(step) | protected | Transition | Evaluates routing rules |
+| getState() | public | ExecutionState | Gets current state |
+| saveState() | protected | void | Persists state |
+| loadState() | protected | void | Loads state from storage |
+
+---
