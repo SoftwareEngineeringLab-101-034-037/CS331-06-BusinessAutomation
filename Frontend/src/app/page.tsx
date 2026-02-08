@@ -69,9 +69,9 @@ const steps = [
 ];
 
 const testimonials = [
-  { text: "\u201cFlowEngine transformed how our teams collaborate. We\u2019ve automated 80% of our repetitive processes and saved over 200 hours per month across departments.\u201d", name: "Sarah Richardson", role: "COO, TechVantage Solutions", initials: "SR", gradient: "from-indigo-500 to-cyan-500" },
-  { text: "\u201cThe admin controls and role-based permissions are exactly what we needed. Onboarding new hires used to take a week \u2014 now it\u2019s done in an afternoon.\u201d", name: "Michael Kowalski", role: "Head of IT, NovaCorp Industries", initials: "MK", gradient: "from-purple-500 to-pink-500" },
-  { text: "\u201cWe evaluated six automation platforms before choosing FlowEngine. The combination of visual workflow design and enterprise-grade security was unmatched.\u201d", name: "Amara Peters", role: "VP Operations, Meridian Group", initials: "AP", gradient: "from-amber-500 to-red-500" },
+  { text: "“Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud.”", name: "A. Lorem", role: "Operations Director, Acme Corp", initials: "AL", gradient: "from-indigo-500 to-cyan-500" },
+  { text: "“Quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum.”", name: "B. Ipsum", role: "Technology Lead, Global Industries", initials: "BI", gradient: "from-purple-500 to-pink-500" },
+  { text: "“Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum et dolorum fuga.”", name: "C. Dolor", role: "VP Operations, Enterprise Solutions Ltd", initials: "CD", gradient: "from-amber-500 to-red-500" },
 ];
 
 export default function Home() {
@@ -121,7 +121,7 @@ export default function Home() {
         <div className="max-w-[1200px] mx-auto px-6">
           <p className="text-[0.9rem] font-medium text-[var(--text-muted)] uppercase tracking-[0.1em] mb-8">Trusted by forward-thinking organisations</p>
           <div className="flex items-center justify-center gap-12 flex-wrap opacity-50">
-            {["Deloitte", "Accenture", "McKinsey", "SAP", "Siemens", "Unilever"].map((name) => (
+            {["Acme Corp", "GlobalTech", "Enterprise Co", "Industry LLC", "Solutions Inc", "Dynamics Ltd"].map((name) => (
               <span key={name} className="text-[1.2rem] font-bold text-[var(--text-muted)] tracking-[0.02em]">{name}</span>
             ))}
           </div>
