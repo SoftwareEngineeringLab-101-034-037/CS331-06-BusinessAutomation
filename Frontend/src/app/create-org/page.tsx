@@ -58,8 +58,8 @@ export default function CreateOrgPage() {
           <div className="flex items-center justify-between mb-6">
             <Link href="/" className="inline-flex items-center gap-2 text-[1.15rem] font-bold text-[var(--text-primary)] hover:opacity-80 transition-opacity">
               <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-9 h-9">
-                <rect width="36" height="36" rx="10" fill="#4f46e5"/>
-                <path d="M10 18h6l2-6 4 12 2-6h6" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                <rect width="36" height="36" rx="10" fill="#4f46e5" />
+                <path d="M10 18h6l2-6 4 12 2-6h6" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
               FlowEngine
             </Link>
@@ -87,9 +87,8 @@ export default function CreateOrgPage() {
           {[0, 1, 2].map((i) => (
             <div
               key={i}
-              className={`flex-1 h-1 rounded-full transition-all duration-500 ${
-                i <= step ? "bg-[var(--primary)]" : "bg-[var(--border)]"
-              }`}
+              className={`flex-1 h-1 rounded-full transition-all duration-500 ${i <= step ? "bg-[var(--primary)]" : "bg-[var(--border)]"
+                }`}
             />
           ))}
         </div>
@@ -317,7 +316,9 @@ export default function CreateOrgPage() {
                     setCreating(true);
                     setError("");
                     try {
-                      await createOrganization({ name: orgName });
+                      await createOrganization({
+                        name: orgName,
+                      });
                       setDone(true);
                     } catch (err: unknown) {
                       const msg = err instanceof Error ? err.message : "Failed to create organisation. Please try again.";
