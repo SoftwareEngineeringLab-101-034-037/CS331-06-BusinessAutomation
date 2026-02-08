@@ -149,3 +149,42 @@
 - **Services → Tasks/Workflows**: Monitoring and alerting through dependencies
 
 ---
+
+## ASSUMPTIONS AND CONSTRAINTS
+
+1. **Every Department must belong to exactly one Organization** (mandatory parent)
+2. **Users can exist without roles** (0..* allows new users without role assignment)
+3. **Workflows must have at least one step** (1..* ensures validity)
+4. **Tasks can be assigned to either User OR Role** (0..1 allows unassigned or role-based)
+5. **Transitions can be unconditional** (0..1 Rule allows simple sequential flow)
+6. **Departments can form hierarchies** (self-reference for organizational trees)
+7. **Requests always instantiate exactly one Workflow** (1 to 1 for traceability)
+8. **Every Request has exactly one WorkflowInstance** (1 to 1 for execution tracking)
+
+---
+
+## DESIGN RATIONALE SUMMARY
+
+### Why Composition for Workflow Components?
+- Workflow definitions are structural
+- Steps, Transitions, Actions have no meaning outside their workflow
+- Deletion should cascade to maintain consistency
+
+### Why Aggregation for Users?
+- Users can be transferred between departments
+- Users might exist temporarily during onboarding
+- Organizational flexibility requires looser coupling
+
+### Why Association for Runtime Entities?
+- Requests, Tasks, Sessions have independent lifecycles
+- Runtime relationships are dynamic
+- Decoupling allows for flexibility in execution
+
+### Why Many-to-Many for RBAC?
+- Modern applications require users with multiple roles
+- Roles should be reusable across users
+- Separation of concerns between user identity and authorization
+
+---
+
+This table provides a complete reference for all 37 relationships in the Business Process Automation Platform UML class diagram.
