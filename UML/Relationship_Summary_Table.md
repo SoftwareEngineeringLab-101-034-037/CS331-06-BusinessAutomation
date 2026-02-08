@@ -52,3 +52,100 @@
 | 37 | Department | Association (→) | Department | 0..1 to * | Department has parent |
 
 ---
+
+## RELATIONSHIP TYPE LEGEND
+
+| Symbol | Type | Meaning | Lifecycle |
+|--------|------|---------|-----------|
+| ◆ | Composition | Strong ownership | Child destroyed with parent |
+| ◇ | Aggregation | Weak ownership | Child can exist independently |
+| → | Association | General relationship | Independent lifecycles |
+| ⇢ | Dependency | Uses relationship | Temporary connection |
+| △ | Inheritance | Is-a relationship | Subclass extends parent |
+
+---
+
+## CARDINALITY NOTATION
+
+| Notation | Meaning |
+|----------|---------|
+| 1 | Exactly one |
+| 0..1 | Zero or one (optional) |
+| * | Zero or more |
+| 1..* | One or more |
+| m..n | Between m and n |
+
+---
+
+## STATISTICS
+
+- **Total Relationships**: 37
+- **Composition**: 8
+- **Aggregation**: 7
+- **Association**: 15
+- **Dependency**: 5
+- **Inheritance**: 1
+- **Self-Reference**: 1
+
+---
+
+## CLASS PARTICIPATION COUNT
+
+| Class Name | Total Relationships | As Source | As Target |
+|-----------|-------------------|-----------|-----------|
+| User | 6 | 3 | 3 |
+| Request | 8 | 5 | 3 |
+| Task | 6 | 2 | 4 |
+| Workflow | 3 | 1 | 2 |
+| WorkflowStep | 6 | 4 | 2 |
+| Organization | 2 | 2 | 0 |
+| Department | 3 | 2 | 1 |
+| Role | 4 | 1 | 3 |
+| Rule | 4 | 0 | 4 |
+| Transition | 2 | 1 | 1 |
+| Notification | 1 | 1 | 0 |
+| NotificationService | 2 | 2 | 0 |
+| EscalationEngine | 2 | 2 | 0 |
+| AnalyticsEngine | 2 | 2 | 0 |
+| Others | 1-2 each | - | - |
+
+---
+
+## MOST CONNECTED CLASSES
+
+1. **Request** (8 relationships)
+   - Central entity in workflow execution
+   - Connects workflow design to execution
+
+2. **Task** (6 relationships)
+   - Core work unit
+   - Connects users, roles, steps, and requests
+
+3. **WorkflowStep** (6 relationships)
+   - Defines workflow structure
+   - Bridge between design and execution
+
+4. **User** (6 relationships)
+   - Central actor in system
+   - Interacts with most functional areas
+
+---
+
+## RELATIONSHIP PATTERNS
+
+### Hub Pattern
+- **Request**: Central hub connecting workflow definition to execution
+- **User**: Central hub connecting authentication, authorization, and work
+
+### Hierarchical Pattern
+- **Organization → Department → User**: Organizational structure
+- **Workflow → WorkflowStep → Transition**: Workflow structure
+
+### Many-to-Many Pattern
+- **User ↔ Role**: Flexible RBAC
+- **Policy ↔ Rule**: Flexible policy management
+
+### Monitoring Pattern
+- **Services → Tasks/Workflows**: Monitoring and alerting through dependencies
+
+---
