@@ -1,3 +1,153 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+/* ── Class-based dark mode (instead of default prefers-color-scheme) ── */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ── Base: sits BELOW utilities in the cascade so Tailwind classes win ── */
+@layer base {
+  :root {
+    --primary: #4f46e5;
+    --primary-light: #818cf8;
+    --primary-dark: #3730a3;
+    --accent: #06b6d4;
+    --accent-light: #67e8f9;
+    --surface: #ffffff;
+    --surface-alt: #f8fafc;
+    --surface-raised: #f1f5f9;
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #94a3b8;
+    --border: #e2e8f0;
+    --radius: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 24px;
+    --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .dark {
+    --primary: #818cf8;
+    --primary-light: #a5b4fc;
+    --primary-dark: #6366f1;
+    --accent: #22d3ee;
+    --accent-light: #67e8f9;
+    --surface: #0f172a;
+    --surface-alt: #1e293b;
+    --surface-raised: #334155;
+    --text-primary: #f1f5f9;
+    --text-secondary: #cbd5e1;
+    --text-muted: #64748b;
+    --border: #334155;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--surface);
+    color: var(--text-primary);
+    line-height: 1.6;
+    overflow-x: hidden;
+    transition: background var(--transition), color var(--transition);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  a {
+    text-decoration: none;
+    color: inherit;
+    transition: color var(--transition);
+  }
+
+  button {
+    cursor: pointer;
+    font-family: inherit;
+  }
+}
+
+/* ── Component-level custom classes ── */
+@layer components {
+  #floatingBg {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    width: 100%;
+    height: 100%;
+  }
+
+  .gradient-text {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .animate-on-scroll {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .animate-on-scroll.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .code-kw { color: #c678dd; }
+  .code-str { color: #98c379; }
+  .code-fn { color: #61afef; }
+  .code-cm { color: #5c6370; font-style: italic; }
+  .code-num { color: #d19a66; }
+  .code-op { color: #56b6c2; }
+  .code-type { color: #e5c07b; }
+  .code-var { color: #e06c75; }
+}
+
+/* ── Keyframes (not affected by cascade layers) ── */
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeInDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+@keyframes shine { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+@keyframes pulse-dot { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.6; transform: scale(1.3); } }
+@keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@keyframes float-slow { 0%, 100% { transform: translate(0, 0); } 25% { transform: translate(15px, -20px); } 50% { transform: translate(-10px, 15px); } 75% { transform: translate(20px, 10px); } }
+
+/* ── Clerk overrides (use !important — cascade layer does not matter) ── */
+.cl-rootBox { width: 100% !important; max-width: 100% !important; }
+.cl-card, .cl-cardBox { box-shadow: none !important; background: transparent !important; border: none !important; width: 100% !important; max-width: 100% !important; padding: 4px !important; margin: 0 !important; }
+.cl-main { width: 100% !important; }
+.cl-headerTitle, .cl-headerSubtitle { display: none !important; }
+.cl-footer, .cl-footerAction { display: none !important; }
+[data-clerk-component] a[href*="clerk.com"], .cl-internal-b3fm6y, .cl-internal-17on0w5 { display: none !important; }
+.cl-formButtonPrimary { background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%) !important; border-radius: 0.75rem !important; text-transform: none !important; font-weight: 600 !important; box-shadow: 0 4px 15px rgba(79,70,229,0.25) !important; min-height: 44px !important; letter-spacing: 0 !important; }
+.cl-formButtonPrimary:hover { box-shadow: 0 6px 20px rgba(79,70,229,0.4) !important; transform: translateY(-1px) !important; }
+.cl-socialButtonsBlockButton { border-radius: 0.75rem !important; background: var(--surface-alt) !important; border: 1.5px solid var(--border) !important; color: var(--text-primary) !important; }
+.cl-socialButtonsBlockButton:hover { transform: translateY(-1px) !important; background: var(--surface-raised) !important; }
+.dark .cl-socialButtonsBlockButton { background: #1e293b !important; border-color: #475569 !important; color: #e2e8f0 !important; }
+.dark .cl-socialButtonsBlockButton:hover { background: #334155 !important; }
+.dark .cl-socialButtonsBlockButtonText { color: #e2e8f0 !important; }
+.cl-formFieldInput { background: var(--surface-alt) !important; border: 1.5px solid var(--border) !important; color: var(--text-primary) !important; }
+.dark .cl-formFieldInput { background: #1e293b !important; border-color: #475569 !important; color: #f1f5f9 !important; }
+.dark .cl-formFieldInput:focus { border-color: #818cf8 !important; box-shadow: 0 0 0 3px rgba(129,140,248,0.2) !important; }
+.cl-formFieldLabel { color: var(--text-primary) !important; }
+.dark .cl-formFieldLabel { color: #e2e8f0 !important; }
+.cl-dividerLine { background: var(--border) !important; }
+.dark .cl-dividerLine { background: #475569 !important; }
+.cl-dividerText { color: var(--text-muted) !important; }
+.dark .cl-dividerText { color: #94a3b8 !important; }
+.cl-identityPreview { background: var(--surface-alt) !important; border-radius: 0.75rem !important; border: 1.5px solid var(--border) !important; }
+.dark .cl-identityPreview { background: #1e293b !important; border-color: #475569 !important; }
+.dark .cl-identityPreviewText { color: #e2e8f0 !important; }
+.cl-otpCodeFieldInput { background: var(--surface-alt) !important; border: 1.5px solid var(--border) !important; }
+.dark .cl-otpCodeFieldInput { background: #1e293b !important; border-color: #475569 !important; color: #f1f5f9 !important; }
+.dark .cl-formButtonPrimary { background: linear-gradient(135deg, #6366f1 0%, #818cf8 100%) !important; box-shadow: 0 4px 15px rgba(99,102,241,0.35) !important; }
+.dark .cl-card, .dark .cl-cardBox { background: transparent !important; }
+.dark .cl-formFieldAction { color: #818cf8 !important; }
