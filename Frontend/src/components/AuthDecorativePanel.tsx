@@ -42,7 +42,7 @@ export default function AuthDecorativePanel({
         <div className="mt-10">
           <div className="text-[0.75rem] text-white/50 uppercase tracking-[1px] mb-3">Trusted by teams at</div>
           <div className="flex gap-6 justify-center flex-wrap opacity-60">
-            {["Stripe", "Notion", "Linear", "Vercel"].map((name) => (
+            {["TechCo", "DataWorks", "CloudServ", "DevOps Ltd"].map((name) => (
               <span key={name} className="text-white font-bold text-[0.9rem]">{name}</span>
             ))}
           </div>

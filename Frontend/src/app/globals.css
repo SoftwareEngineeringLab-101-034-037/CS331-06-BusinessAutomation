@@ -131,7 +131,9 @@ button {
 .dark .cl-socialButtonsBlockButton:hover { background: #334155 !important; }
 .dark .cl-socialButtonsBlockButtonText { color: #e2e8f0 !important; }
 .cl-formFieldInput { background: var(--surface-alt) !important; border: 1.5px solid var(--border) !important; color: var(--text-primary) !important; }
+.cl-formFieldInput::placeholder { color: var(--text-muted) !important; opacity: 0.7 !important; }
 .dark .cl-formFieldInput { background: #1e293b !important; border-color: #475569 !important; color: #f1f5f9 !important; }
+.dark .cl-formFieldInput::placeholder { color: #94a3b8 !important; opacity: 1 !important; }
 .dark .cl-formFieldInput:focus { border-color: #818cf8 !important; box-shadow: 0 0 0 3px rgba(129,140,248,0.2) !important; }
 .cl-formFieldLabel { color: var(--text-primary) !important; }
 .dark .cl-formFieldLabel { color: #e2e8f0 !important; }
@@ -147,3 +149,5 @@ button {
 .dark .cl-formButtonPrimary { background: linear-gradient(135deg, #6366f1 0%, #818cf8 100%) !important; box-shadow: 0 4px 15px rgba(99,102,241,0.35) !important; }
 .dark .cl-card, .dark .cl-cardBox { background: transparent !important; }
 .dark .cl-formFieldAction { color: #818cf8 !important; }
+.dark .cl-formResendCodeLink, .dark .cl-formFieldAction__link { color: #818cf8 !important; }
+.dark .cl-formFieldHintText, .dark .cl-formFieldSuccessText { color: #94a3b8 !important; }

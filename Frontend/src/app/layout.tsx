@@ -19,7 +19,23 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
-        <body className="antialiased">
+        <head>
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+                (function() {
+                  try {
+                    var theme = localStorage.getItem('theme');
+                    if (theme === 'dark') {
+                      document.documentElement.classList.add('dark');
+                    }
+                  } catch (e) {}
+                })();
+              `,
+            }}
+          />
+        </head>
+        <body className="antialiased" suppressHydrationWarning>
           <ThemeProvider>
             {children}
           </ThemeProvider>

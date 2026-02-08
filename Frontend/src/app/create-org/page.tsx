@@ -165,7 +165,9 @@ export default function CreateOrgPage() {
               <div>
                 <label className={labelCls} htmlFor="orgDomain">Organisation Domain</label>
                 <input type="text" id="orgDomain" value={orgDomain} onChange={(e) => setOrgDomain(e.target.value)} className={inputCls} placeholder="acme.com" required />
-                <p className="text-xs text-[var(--text-muted)] mt-1">Members invited will use @acme.com emails. Managed via Clerk Organizations.</p>
+                <p className="text-xs text-[var(--text-muted)] mt-1">
+                  Members invited will use <span className="font-semibold text-[var(--primary)] dark:text-[#818cf8]">@{orgDomain || "acme.com"}</span> emails. Managed via Clerk Organizations.
+                </p>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
@@ -213,13 +215,15 @@ export default function CreateOrgPage() {
         {/* Step 3: Review & Confirm */}
         {step === 2 && (
           <div className="animate-[fadeInUp_0.4s_ease]">
-            <div className="flex items-start gap-3 mb-6">
-              <div className="w-8 h-8 rounded-full bg-[var(--primary)] text-white flex items-center justify-center font-bold text-sm shrink-0">3</div>
-              <div>
-                <p className="font-bold">Review &amp; create</p>
-                <p className="text-sm text-[var(--text-secondary)]">Confirm your details. Your Clerk organisation will be created automatically.</p>
-              </div>
-            </div>
+            {!done && (
+              <>
+                <div className="flex items-start gap-3 mb-6">
+                  <div className="w-8 h-8 rounded-full bg-[var(--primary)] text-white flex items-center justify-center font-bold text-sm shrink-0">3</div>
+                  <div>
+                    <p className="font-bold">Review &amp; create</p>
+                    <p className="text-sm text-[var(--text-secondary)]">Confirm your details. Your Clerk organisation will be created automatically.</p>
+                  </div>
+                </div>
 
             <div className="space-y-4 mb-6">
               {/* Admin Card */}
@@ -265,17 +269,6 @@ export default function CreateOrgPage() {
               </div>
             </div>
 
-            {/* Webhook info */}
-            <div className="flex gap-3 bg-indigo-50 dark:bg-indigo-950/30 border border-indigo-200 dark:border-indigo-800 rounded-[var(--radius-lg)] p-4 mb-6">
-              <div className="w-9 h-9 rounded-lg bg-[var(--primary)]/10 flex items-center justify-center shrink-0">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5 text-[var(--primary)]"><path strokeLinecap="round" strokeLinejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" /></svg>
-              </div>
-              <div>
-                <strong className="text-sm">What happens next?</strong>
-                <p className="text-sm text-[var(--text-secondary)] mt-0.5">A Clerk Organisation will be created via API. An <code className="bg-[var(--surface-alt)] px-1 rounded text-xs">organization.created</code> webhook fires to your backend, provisioning your workspace, admin role, and initial workstations.</p>
-              </div>
-            </div>
-
             <label className="flex items-start gap-2.5 mb-6 cursor-pointer">
               <input type="checkbox" checked={agreed} onChange={(e) => setAgreed(e.target.checked)} className="mt-1 w-4 h-4 rounded border-[var(--border)] text-[var(--primary)] focus:ring-[var(--primary)]/20" />
               <span className="text-sm text-[var(--text-secondary)]">
@@ -288,6 +281,8 @@ export default function CreateOrgPage() {
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5 shrink-0"><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" /></svg>
                 {error}
               </div>
+            )}
+              </>
             )}
 
             {done ? (
