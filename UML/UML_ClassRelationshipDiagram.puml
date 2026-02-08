@@ -1,0 +1,645 @@
+@startuml Business_Process_Automation_Platform_Class_Diagram_CORRECTED
+
+!define COMPOSITION_COLOR #8B4513
+!define AGGREGATION_COLOR #4682B4
+!define ASSOCIATION_COLOR #2F4F4F
+!define INHERITANCE_COLOR #DC143C
+
+skinparam classAttributeIconSize 0
+skinparam class {
+    BackgroundColor #E3F2FD
+    BorderColor #1976D2
+    ArrowColor #424242
+}
+
+skinparam packageStyle rectangle
+
+title Business Process Automation Platform - Complete UML Class Diagram\\nwith All Relationships and Cardinalities 
+
+' ==================== ORGANIZATION & USER MANAGEMENT ====================
+package "Organization & User Management" <<Rectangle>> #LightBlue {
+    
+    class Organization {
+        - organizationId: String
+        - name: String
+        - subdomain: String
+        - createdAt: DateTime
+        - isActive: Boolean
+        - settings: OrganizationSettings
+        __
+        + create(name, subdomain): Organization
+        + update(settings): void
+        + deactivate(): void
+        + getDepartments(): List<Department>
+        + addDepartment(dept): void
+        + getUsers(): List<User>
+    }
+    
+    class Department {
+        - departmentId: String
+        - name: String
+        - organizationId: String
+        - parentDepartmentId: String
+        - createdAt: DateTime
+        __
+        + create(name, orgId): Department
+        + update(name): void
+        + delete(): void
+        + getUsers(): List<User>
+        + getSubDepartments(): List<Department>
+    }
+    
+    class User {
+        - userId: String
+        - email: String
+        - passwordHash: String
+        - firstName: String
+        - lastName: String
+        - organizationId: String
+        - departmentId: String
+        - isActive: Boolean
+        - createdAt: DateTime
+        - lastLoginAt: DateTime
+        __
+        + register(email, password): User
+        + authenticate(email, password): AuthToken
+        + updateProfile(data): void
+        + deactivate(): void
+        + getRoles(): List<Role>
+        + assignRole(role): void
+        + removeRole(role): void
+        + getTasks(): List<Task>
+        + getRequests(): List<Request>
+    }
+    
+    class Role {
+        - roleId: String
+        - name: String
+        - description: String
+        - organizationId: String
+        - permissions: List<Permission>
+        - isSystemRole: Boolean
+        __
+        + create(name, desc, orgId): Role
+        + update(name, desc): void
+        + delete(): void
+        + addPermission(perm): void
+        + removePermission(perm): void
+        + hasPermission(action): Boolean
+        + getUsers(): List<User>
+    }
+    
+    class Permission {
+        - permissionId: String
+        - name: String
+        - resource: String
+        - action: String
+        __
+        + create(name, resource, action): Permission
+        + matches(resource, action): Boolean
+    }
+    
+    class Session {
+        - sessionId: String
+        - userId: String
+        - token: String
+        - createdAt: DateTime
+        - expiresAt: DateTime
+        - ipAddress: String
+        - isValid: Boolean
+        __
+        + create(userId): Session
+        + validate(token): Boolean
+        + refresh(): Session
+        + invalidate(): void
+        + isExpired(): Boolean
+    }
+}
+
+' ==================== WORKFLOW DESIGN & CONFIGURATION ====================
+package "Workflow Design & Configuration" <<Rectangle>> #LightGreen {
+    
+    class Workflow {
+        - workflowId: String
+        - name: String
+        - description: String
+        - organizationId: String
+        - version: Integer
+        - status: WorkflowStatus
+        - inputSchema: JSONSchema
+        - createdBy: String
+        - createdAt: DateTime
+        - publishedAt: DateTime
+        __
+        + create(name, desc, orgId): Workflow
+        + update(data): void
+        + publish(): void
+        + archive(): void
+        + clone(): Workflow
+        + validate(): ValidationResult
+        + getSteps(): List<WorkflowStep>
+        + addStep(step): void
+        + removeStep(stepId): void
+        + getStartStep(): WorkflowStep
+        + getVersionHistory(): List<Workflow>
+    }
+    
+    class WorkflowStep {
+        - stepId: String
+        - workflowId: String
+        - name: String
+        - description: String
+        - stepType: StepType
+        - sequence: Integer
+        - assignedRoleId: String
+        - slaHours: Integer
+        - isStartStep: Boolean
+        - isEndStep: Boolean
+        __
+        + create(workflowId, data): WorkflowStep
+        + update(data): void
+        + delete(): void
+        + getTransitions(): List<Transition>
+        + addTransition(trans): void
+        + getActions(): List<StepAction>
+        + getAssignedRole(): Role
+    }
+    
+    class Transition {
+        - transitionId: String
+        - fromStepId: String
+        - toStepId: String
+        - triggerAction: String
+        - condition: Rule
+        - priority: Integer
+        __
+        + create(fromStep, toStep, action): Transition
+        + update(data): void
+        + delete(): void
+        + setCondition(rule): void
+        + evaluate(context): Boolean
+    }
+    
+    class StepAction {
+        - actionId: String
+        - stepId: String
+        - name: String
+        - label: String
+        - requiresComment: Boolean
+        - requiresAttachment: Boolean
+        __
+        + create(stepId, name): StepAction
+        + update(data): void
+        + delete(): void
+    }
+}
+
+' ==================== WORKFLOW EXECUTION ENGINE ====================
+package "Workflow Execution Engine" <<Rectangle>> #Lavender {
+    
+    class Request {
+        - requestId: String
+        - workflowId: String
+        - requesterId: String
+        - currentStepId: String
+        - status: RequestStatus
+        - inputData: JSON
+        - createdAt: DateTime
+        - completedAt: DateTime
+        - priority: Priority
+        __
+        + submit(workflowId, data): Request
+        + cancel(reason): void
+        + reopen(): void
+        + getStatus(): RequestStatus
+        + getCurrentStep(): WorkflowStep
+        + getTimeline(): List<TimelineEntry>
+        + getTasks(): List<Task>
+        + addComment(comment): void
+        + addAttachment(file): void
+        + getComments(): List<Comment>
+        + getAttachments(): List<Attachment>
+    }
+    
+    class WorkflowInstance {
+        - instanceId: String
+        - requestId: String
+        - workflowId: String
+        - state: ExecutionState
+        - context: ExecutionContext
+        - startedAt: DateTime
+        - isRunning: Boolean
+        - parallelBranches: List<Branch>
+        __
+        + start(requestId): void
+        + pause(): void
+        + resume(): void
+        + transitionTo(stepId): void
+        + executeStep(stepId): void
+        + handleEvent(event): void
+        # synchronizeBranches(): void
+        # evaluateConditions(step): Transition
+        + getState(): ExecutionState
+        # saveState(): void
+        # loadState(): void
+    }
+    
+    class ExecutionContext {
+        - contextId: String
+        - instanceId: String
+        - variables: Map<String,Object>
+        - requestData: JSON
+        - stepHistory: List<StepExecution>
+        __
+        + getVariable(key): Object
+        + setVariable(key, value): void
+        + getRequestData(): JSON
+        + addToHistory(stepExec): void
+        + getHistory(): List<StepExecution>
+    }
+}
+
+' ==================== TASK ORCHESTRATION ====================
+package "Task Orchestration" <<Rectangle>> #Wheat {
+    
+    class Task {
+        - taskId: String
+        - requestId: String
+        - stepId: String
+        - assigneeId: String
+        - assignedRoleId: String
+        - status: TaskStatus
+        - dueAt: DateTime
+        - createdAt: DateTime
+        - completedAt: DateTime
+        - decision: String
+        - comments: String
+        __
+        + create(requestId, stepId): Task
+        + assign(userId): void
+        + reassign(newUserId): void
+        + delegate(userId): void
+        + complete(action, comment): void
+        + escalate(reason): void
+        + isOverdue(): Boolean
+        + getRequest(): Request
+        + getStep(): WorkflowStep
+        + getAssignee(): User
+        + getAvailableActions(): List<StepAction>
+    }
+    
+    class TaskQueue {
+        - queueId: String
+        - organizationId: String
+        - roleId: String
+        - pendingTasks: List<Task>
+        __
+        + addTask(task): void
+        + removeTask(taskId): void
+        + getNextTask(): Task
+        + getTasksByUser(userId): List<Task>
+        + getTasksByRole(roleId): List<Task>
+        + getOverdueTasks(): List<Task>
+        + getPendingCount(): Integer
+    }
+}
+
+' ==================== RULE ENGINE & POLICIES ====================
+package "Rule Engine & Policies" <<Rectangle>> #MistyRose {
+    
+    class Rule {
+        - ruleId: String
+        - name: String
+        - description: String
+        - conditionExpression: String
+        - priority: Integer
+        - isActive: Boolean
+        - organizationId: String
+        __
+        + create(name, condition): Rule
+        + update(data): void
+        + delete(): void
+        + evaluate(context): Boolean
+        + validate(): ValidationResult
+        + simulate(testContext): SimulationResult
+    }
+    
+    class RuleEngine {
+        - rules: List<Rule>
+        - organizationId: String
+        __
+        + loadRules(orgId): void
+        + evaluate(context): RuleResult
+        + evaluateRule(ruleId, ctx): Boolean
+        # getApplicableRules(context): List<Rule>
+        # executeChain(rules, ctx): RuleResult
+        + determineRouting(step, ctx): Transition
+    }
+    
+    class Policy {
+        - policyId: String
+        - name: String
+        - type: PolicyType
+        - rules: List<Rule>
+        - organizationId: String
+        - isEnforced: Boolean
+        __
+        + create(name, type, rules): Policy
+        + update(data): void
+        + enforce(context): PolicyResult
+        + validate(): ValidationResult
+    }
+}
+
+' ==================== NOTIFICATION & ESCALATION ====================
+package "Notification & Escalation" <<Rectangle>> #Honeydew {
+    
+    class Notification {
+        - notificationId: String
+        - userId: String
+        - type: NotificationType
+        - channel: NotificationChannel
+        - title: String
+        - message: String
+        - isRead: Boolean
+        - createdAt: DateTime
+        - sentAt: DateTime
+        __
+        + create(userId, type, msg): Notification
+        + send(): void
+        + markAsRead(): void
+        + getUser(): User
+    }
+    
+    class NotificationService {
+        - emailProvider: EmailProvider
+        - smsProvider: SMSProvider
+        - templates: Map<String,Template>
+        __
+        + sendEmail(notification): void
+        + sendSMS(notification): void
+        + sendInApp(notification): void
+        + notifyTaskAssignment(task): void
+        + notifySLABreach(task): void
+        + notifyCompletion(request): void
+        # getTemplate(type): Template
+    }
+    
+    class EscalationPolicy {
+        - policyId: String
+        - name: String
+        - triggerCondition: String
+        - escalationLevel: Integer
+        - targetRoleId: String
+        - actions: List<EscalationAction>
+        __
+        + create(name, condition): EscalationPolicy
+        + trigger(task): void
+        + getNextLevel(): EscalationPolicy
+    }
+    
+    class EscalationEngine {
+        - policies: List<EscalationPolicy>
+        - scheduler: Scheduler
+        __
+        + monitorTasks(): void
+        # checkSLA(task): Boolean
+        + executeEscalation(task, policy): void
+        # reassignTask(task, roleId): void
+        # notifyStakeholders(task): void
+    }
+}
+
+' ==================== ANALYTICS & REPORTING ====================
+package "Analytics & Reporting" <<Rectangle>> #AliceBlue {
+    
+    class WorkflowMetrics {
+        - workflowId: String
+        - averageCompletionTime: Duration
+        - slaComplianceRate: Float
+        - totalRequests: Integer
+        - pendingRequests: Integer
+        - bottleneckSteps: List<String>
+        - periodStart: DateTime
+        - periodEnd: DateTime
+        __
+        + calculate(workflowId, period): WorkflowMetrics
+        + getAverageTime(): Duration
+        + getSLACompliance(): Float
+        + getBottlenecks(): List<BottleneckInfo>
+        + compareWith(otherMetrics): Comparison
+    }
+    
+    class AnalyticsEngine {
+        - metricsRepository: MetricsRepo
+        - mlModel: PredictionModel
+        __
+        + calculateMetrics(workflowId): WorkflowMetrics
+        + detectBottlenecks(workflowId): List<Bottleneck>
+        + predictSLAViolation(task): Prediction
+        + detectAnomalies(workflowId): List<Anomaly>
+        + generatePerformanceReport(): Report
+        + getWorkloadDistribution(): Distribution
+        + recommendOptimizations(): List<Recommendation>
+    }
+    
+    class SimulationEngine {
+        - simulationId: String
+        - workflowId: String
+        - parameters: SimulationParams
+        - results: SimulationResults
+        __
+        + configure(params): void
+        + run(iterations): SimulationResults
+        # generateSyntheticLoad(count): List<Request>
+        + predictDelays(): List<Delay>
+        + predictResourceLoad(): ResourceForecast
+        + validateSLAFeasibility(): SLAValidation
+        + exportResults(): Report
+    }
+}
+
+' ==================== INTEGRATION ====================
+package "External Integrations" <<Rectangle>> #LemonChiffon {
+    
+    abstract class ExternalServiceConnector {
+        - connectorId: String
+        # serviceType: String
+        # endpoint: String
+        - credentials: Credentials
+        # isConnected: Boolean
+        __
+        + {abstract} connect(): void
+        + {abstract} disconnect(): void
+        + testConnection(): Boolean
+        + execute(action, params): Response
+        # handleError(error): void
+    }
+    
+    class WebhookHandler {
+        - handlerId: String
+        - endpoint: String
+        - secretKey: String
+        - eventMappings: Map<String,Handler>
+        __
+        + register(endpoint): String
+        # validateSignature(req): Boolean
+        + processEvent(event): void
+        + triggerWorkflow(eventData): Request
+    }
+    
+    class APIConnector {
+        - baseUrl: String
+        - authToken: String
+        - timeout: Integer
+        - retryPolicy: RetryPolicy
+        __
+        + get(path, params): Response
+        + post(path, body): Response
+        + put(path, body): Response
+        + delete(path): Response
+        # setAuthHeader(token): void
+        # handleResponse(response): Object
+    }
+}
+
+' ==================== SUPPORTING CLASSES ====================
+package "Supporting Classes" <<Rectangle>> #WhiteSmoke {
+    
+    class Comment {
+        - commentId: String
+        - requestId: String
+        - userId: String
+        - content: String
+        - createdAt: DateTime
+        __
+        + create(requestId, content): Comment
+        + update(content): void
+        + delete(): void
+    }
+    
+    class Attachment {
+        - attachmentId: String
+        - requestId: String
+        - fileName: String
+        - fileSize: Long
+        - mimeType: String
+        - storagePath: String
+        - uploadedBy: String
+        - uploadedAt: DateTime
+        __
+        + upload(requestId, file): Attachment
+        + download(): File
+        + delete(): void
+        + getUrl(): String
+    }
+    
+    class TimelineEntry {
+        - entryId: String
+        - requestId: String
+        - eventType: String
+        - description: String
+        - userId: String
+        - timestamp: DateTime
+        - metadata: JSON
+        __
+        + create(requestId, event): TimelineEntry
+        + getForRequest(requestId): List<TimelineEntry>
+    }
+}
+
+' ==================== COMPOSITION RELATIONSHIPS ====================
+' Strong ownership - child cannot exist without parent (8 total)
+
+Organization *-- "1..*" Department : owns >
+Workflow *-- "1..*" WorkflowStep : contains >
+WorkflowStep *-- "0..*" Transition : defines >
+WorkflowStep *-- "1..*" StepAction : provides >
+Request *-- "0..*" Comment : contains >
+Request *-- "0..*" Attachment : contains >
+Request *-- "0..*" TimelineEntry : tracks >
+WorkflowInstance *-- "1" ExecutionContext : has >
+
+' ==================== AGGREGATION RELATIONSHIPS ====================
+' Weak ownership - child can exist independently (7 total)
+
+Organization o-- "1..*" User : employs >
+Department o-- "0..*" User : contains >
+Role o-- "1..*" Permission : includes >
+Policy o-- "*" Rule : enforces >
+TaskQueue o-- "0..*" Task : manages >
+RuleEngine o-- "1..*" Rule : uses >
+EscalationEngine o-- "1..*" EscalationPolicy : applies >
+
+' ==================== ASSOCIATION RELATIONSHIPS ====================
+' General relationships between classes (15 total)
+
+User "0..*" -- "0..*" Role : assigned to >
+User "1" -- "0..*" Session : authenticated by >
+User "1" -- "0..*" Request : submits >
+User "1" -- "0..*" Task : assigned <
+
+Request "*" -- "1" Workflow : instance of >
+Request "1" -- "1" WorkflowInstance : executes >
+Request "1" -- "0..*" Task : generates >
+
+Task "*" -- "1" WorkflowStep : based on >
+Task "*" -- "0..1" Role : assigned to role >
+
+WorkflowStep "*" -- "1" Role : assigned to >
+
+Transition "*" -- "0..1" Rule : evaluates >
+
+Notification "*" -- "1" User : sent to >
+NotificationService "1" -- "0..*" Notification : sends >
+
+AnalyticsEngine "1" -- "0..*" WorkflowMetrics : generates >
+SimulationEngine "1" -- "1" Workflow : simulates >
+
+' ==================== DEPENDENCY RELATIONSHIPS ====================
+' Uses relationship (dashed arrows) (5 total)
+
+NotificationService ..> Task : monitors
+EscalationEngine ..> Task : monitors
+AnalyticsEngine ..> Workflow : analyzes
+WebhookHandler ..> Request : triggers
+RuleEngine ..> Transition : determines
+
+' ==================== INHERITANCE RELATIONSHIPS ====================
+' Generalization (1 total)
+
+APIConnector --|> ExternalServiceConnector
+
+' ==================== SELF-REFERENCES ====================
+' Hierarchical relationships (1 total)
+
+Department "0..1" -- "0..*" Department : parent of >
+
+' ==================== NOTES ====================
+note top of Organization
+  **RELATIONSHIP TYPES:**
+  **Composition** ◆ = Filled diamond (strong ownership)
+  **Aggregation** ◇ = Hollow diamond (weak ownership)
+  **Association** — = Simple line (relationship)
+  **Inheritance** △ = Hollow triangle (is-a)
+  **Dependency** ⇢ = Dashed arrow (uses)
+  
+  **TOTAL: 37 Relationships**
+  8 Composition + 7 Aggregation + 15 Association
+  + 5 Dependency + 1 Inheritance + 1 Self-Reference
+end note
+
+note right of Workflow
+  A Workflow defines the template.
+  Request creates instances.
+  WorkflowInstance manages execution.
+end note
+
+note bottom of Task
+  Tasks are generated from Requests
+  based on WorkflowSteps.
+  They are assigned to Users based
+  on Roles.
+end note
+
+@enduml
