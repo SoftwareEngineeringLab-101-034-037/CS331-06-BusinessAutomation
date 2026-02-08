@@ -14,7 +14,7 @@ skinparam class {
 
 skinparam packageStyle rectangle
 
-title Business Process Automation Platform - Complete UML Class Diagram\\nwith All Relationships and Cardinalities (CORRECTED VERSION)
+title Business Process Automation Platform - Complete UML Class Diagram\\nwith All Relationships and Cardinalities 
 
 ' ==================== ORGANIZATION & USER MANAGEMENT ====================
 package "Organization & User Management" <<Rectangle>> #LightBlue {
