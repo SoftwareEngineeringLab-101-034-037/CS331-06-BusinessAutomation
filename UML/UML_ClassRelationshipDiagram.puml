@@ -1,0 +1,260 @@
+@startuml Business_Process_Automation_Platform_Class_Diagram_CORRECTED
+
+!define COMPOSITION_COLOR #8B4513
+!define AGGREGATION_COLOR #4682B4
+!define ASSOCIATION_COLOR #2F4F4F
+!define INHERITANCE_COLOR #DC143C
+
+skinparam classAttributeIconSize 0
+skinparam class {
+    BackgroundColor #E3F2FD
+    BorderColor #1976D2
+    ArrowColor #424242
+}
+
+skinparam packageStyle rectangle
+
+title Business Process Automation Platform - Complete UML Class Diagram\\nwith All Relationships and Cardinalities (CORRECTED VERSION)
+
+' ==================== ORGANIZATION & USER MANAGEMENT ====================
+package "Organization & User Management" <<Rectangle>> #LightBlue {
+    
+    class Organization {
+        - organizationId: String
+        - name: String
+        - subdomain: String
+        - createdAt: DateTime
+        - isActive: Boolean
+        - settings: OrganizationSettings
+        __
+        + create(name, subdomain): Organization
+        + update(settings): void
+        + deactivate(): void
+        + getDepartments(): List<Department>
+        + addDepartment(dept): void
+        + getUsers(): List<User>
+    }
+    
+    class Department {
+        - departmentId: String
+        - name: String
+        - organizationId: String
+        - parentDepartmentId: String
+        - createdAt: DateTime
+        __
+        + create(name, orgId): Department
+        + update(name): void
+        + delete(): void
+        + getUsers(): List<User>
+        + getSubDepartments(): List<Department>
+    }
+    
+    class User {
+        - userId: String
+        - email: String
+        - passwordHash: String
+        - firstName: String
+        - lastName: String
+        - organizationId: String
+        - departmentId: String
+        - isActive: Boolean
+        - createdAt: DateTime
+        - lastLoginAt: DateTime
+        __
+        + register(email, password): User
+        + authenticate(email, password): AuthToken
+        + updateProfile(data): void
+        + deactivate(): void
+        + getRoles(): List<Role>
+        + assignRole(role): void
+        + removeRole(role): void
+        + getTasks(): List<Task>
+        + getRequests(): List<Request>
+    }
+    
+    class Role {
+        - roleId: String
+        - name: String
+        - description: String
+        - organizationId: String
+        - permissions: List<Permission>
+        - isSystemRole: Boolean
+        __
+        + create(name, desc, orgId): Role
+        + update(name, desc): void
+        + delete(): void
+        + addPermission(perm): void
+        + removePermission(perm): void
+        + hasPermission(action): Boolean
+        + getUsers(): List<User>
+    }
+    
+    class Permission {
+        - permissionId: String
+        - name: String
+        - resource: String
+        - action: String
+        __
+        + create(name, resource, action): Permission
+        + matches(resource, action): Boolean
+    }
+    
+    class Session {
+        - sessionId: String
+        - userId: String
+        - token: String
+        - createdAt: DateTime
+        - expiresAt: DateTime
+        - ipAddress: String
+        - isValid: Boolean
+        __
+        + create(userId): Session
+        + validate(token): Boolean
+        + refresh(): Session
+        + invalidate(): void
+        + isExpired(): Boolean
+    }
+}
+
+' ==================== WORKFLOW DESIGN & CONFIGURATION ====================
+package "Workflow Design & Configuration" <<Rectangle>> #LightGreen {
+    
+    class Workflow {
+        - workflowId: String
+        - name: String
+        - description: String
+        - organizationId: String
+        - version: Integer
+        - status: WorkflowStatus
+        - inputSchema: JSONSchema
+        - createdBy: String
+        - createdAt: DateTime
+        - publishedAt: DateTime
+        __
+        + create(name, desc, orgId): Workflow
+        + update(data): void
+        + publish(): void
+        + archive(): void
+        + clone(): Workflow
+        + validate(): ValidationResult
+        + getSteps(): List<WorkflowStep>
+        + addStep(step): void
+        + removeStep(stepId): void
+        + getStartStep(): WorkflowStep
+        + getVersionHistory(): List<Workflow>
+    }
+    
+    class WorkflowStep {
+        - stepId: String
+        - workflowId: String
+        - name: String
+        - description: String
+        - stepType: StepType
+        - sequence: Integer
+        - assignedRoleId: String
+        - slaHours: Integer
+        - isStartStep: Boolean
+        - isEndStep: Boolean
+        __
+        + create(workflowId, data): WorkflowStep
+        + update(data): void
+        + delete(): void
+        + getTransitions(): List<Transition>
+        + addTransition(trans): void
+        + getActions(): List<StepAction>
+        + getAssignedRole(): Role
+    }
+    
+    class Transition {
+        - transitionId: String
+        - fromStepId: String
+        - toStepId: String
+        - triggerAction: String
+        - condition: Rule
+        - priority: Integer
+        __
+        + create(fromStep, toStep, action): Transition
+        + update(data): void
+        + delete(): void
+        + setCondition(rule): void
+        + evaluate(context): Boolean
+    }
+    
+    class StepAction {
+        - actionId: String
+        - stepId: String
+        - name: String
+        - label: String
+        - requiresComment: Boolean
+        - requiresAttachment: Boolean
+        __
+        + create(stepId, name): StepAction
+        + update(data): void
+        + delete(): void
+    }
+}
+
+' ==================== WORKFLOW EXECUTION ENGINE ====================
+package "Workflow Execution Engine" <<Rectangle>> #Lavender {
+    
+    class Request {
+        - requestId: String
+        - workflowId: String
+        - requesterId: String
+        - currentStepId: String
+        - status: RequestStatus
+        - inputData: JSON
+        - createdAt: DateTime
+        - completedAt: DateTime
+        - priority: Priority
+        __
+        + submit(workflowId, data): Request
+        + cancel(reason): void
+        + reopen(): void
+        + getStatus(): RequestStatus
+        + getCurrentStep(): WorkflowStep
+        + getTimeline(): List<TimelineEntry>
+        + getTasks(): List<Task>
+        + addComment(comment): void
+        + addAttachment(file): void
+        + getComments(): List<Comment>
+        + getAttachments(): List<Attachment>
+    }
+    
+    class WorkflowInstance {
+        - instanceId: String
+        - requestId: String
+        - workflowId: String
+        - state: ExecutionState
+        - context: ExecutionContext
+        - startedAt: DateTime
+        - isRunning: Boolean
+        - parallelBranches: List<Branch>
+        __
+        + start(requestId): void
+        + pause(): void
+        + resume(): void
+        + transitionTo(stepId): void
+        + executeStep(stepId): void
+        + handleEvent(event): void
+        # synchronizeBranches(): void
+        # evaluateConditions(step): Transition
+        + getState(): ExecutionState
+        # saveState(): void
+        # loadState(): void
+    }
+    
+    class ExecutionContext {
+        - contextId: String
+        - instanceId: String
+        - variables: Map<String,Object>
+        - requestData: JSON
+        - stepHistory: List<StepExecution>
+        __
+        + getVariable(key): Object
+        + setVariable(key, value): void
+        + getRequestData(): JSON
+        + addToHistory(stepExec): void
+        + getHistory(): List<StepExecution>
+    }
+}
