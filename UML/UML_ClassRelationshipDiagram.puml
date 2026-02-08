@@ -258,3 +258,154 @@ package "Workflow Execution Engine" <<Rectangle>> #Lavender {
         + getHistory(): List<StepExecution>
     }
 }
+
+' ==================== TASK ORCHESTRATION ====================
+package "Task Orchestration" <<Rectangle>> #Wheat {
+    
+    class Task {
+        - taskId: String
+        - requestId: String
+        - stepId: String
+        - assigneeId: String
+        - assignedRoleId: String
+        - status: TaskStatus
+        - dueAt: DateTime
+        - createdAt: DateTime
+        - completedAt: DateTime
+        - decision: String
+        - comments: String
+        __
+        + create(requestId, stepId): Task
+        + assign(userId): void
+        + reassign(newUserId): void
+        + delegate(userId): void
+        + complete(action, comment): void
+        + escalate(reason): void
+        + isOverdue(): Boolean
+        + getRequest(): Request
+        + getStep(): WorkflowStep
+        + getAssignee(): User
+        + getAvailableActions(): List<StepAction>
+    }
+    
+    class TaskQueue {
+        - queueId: String
+        - organizationId: String
+        - roleId: String
+        - pendingTasks: List<Task>
+        __
+        + addTask(task): void
+        + removeTask(taskId): void
+        + getNextTask(): Task
+        + getTasksByUser(userId): List<Task>
+        + getTasksByRole(roleId): List<Task>
+        + getOverdueTasks(): List<Task>
+        + getPendingCount(): Integer
+    }
+}
+
+' ==================== RULE ENGINE & POLICIES ====================
+package "Rule Engine & Policies" <<Rectangle>> #MistyRose {
+    
+    class Rule {
+        - ruleId: String
+        - name: String
+        - description: String
+        - conditionExpression: String
+        - priority: Integer
+        - isActive: Boolean
+        - organizationId: String
+        __
+        + create(name, condition): Rule
+        + update(data): void
+        + delete(): void
+        + evaluate(context): Boolean
+        + validate(): ValidationResult
+        + simulate(testContext): SimulationResult
+    }
+    
+    class RuleEngine {
+        - rules: List<Rule>
+        - organizationId: String
+        __
+        + loadRules(orgId): void
+        + evaluate(context): RuleResult
+        + evaluateRule(ruleId, ctx): Boolean
+        # getApplicableRules(context): List<Rule>
+        # executeChain(rules, ctx): RuleResult
+        + determineRouting(step, ctx): Transition
+    }
+    
+    class Policy {
+        - policyId: String
+        - name: String
+        - type: PolicyType
+        - rules: List<Rule>
+        - organizationId: String
+        - isEnforced: Boolean
+        __
+        + create(name, type, rules): Policy
+        + update(data): void
+        + enforce(context): PolicyResult
+        + validate(): ValidationResult
+    }
+}
+
+' ==================== NOTIFICATION & ESCALATION ====================
+package "Notification & Escalation" <<Rectangle>> #Honeydew {
+    
+    class Notification {
+        - notificationId: String
+        - userId: String
+        - type: NotificationType
+        - channel: NotificationChannel
+        - title: String
+        - message: String
+        - isRead: Boolean
+        - createdAt: DateTime
+        - sentAt: DateTime
+        __
+        + create(userId, type, msg): Notification
+        + send(): void
+        + markAsRead(): void
+        + getUser(): User
+    }
+    
+    class NotificationService {
+        - emailProvider: EmailProvider
+        - smsProvider: SMSProvider
+        - templates: Map<String,Template>
+        __
+        + sendEmail(notification): void
+        + sendSMS(notification): void
+        + sendInApp(notification): void
+        + notifyTaskAssignment(task): void
+        + notifySLABreach(task): void
+        + notifyCompletion(request): void
+        # getTemplate(type): Template
+    }
+    
+    class EscalationPolicy {
+        - policyId: String
+        - name: String
+        - triggerCondition: String
+        - escalationLevel: Integer
+        - targetRoleId: String
+        - actions: List<EscalationAction>
+        __
+        + create(name, condition): EscalationPolicy
+        + trigger(task): void
+        + getNextLevel(): EscalationPolicy
+    }
+    
+    class EscalationEngine {
+        - policies: List<EscalationPolicy>
+        - scheduler: Scheduler
+        __
+        + monitorTasks(): void
+        # checkSLA(task): Boolean
+        + executeEscalation(task, policy): void
+        # reassignTask(task, roleId): void
+        # notifyStakeholders(task): void
+    }
+}
