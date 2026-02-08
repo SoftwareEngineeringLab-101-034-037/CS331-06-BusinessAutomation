@@ -409,3 +409,237 @@ package "Notification & Escalation" <<Rectangle>> #Honeydew {
         # notifyStakeholders(task): void
     }
 }
+
+' ==================== ANALYTICS & REPORTING ====================
+package "Analytics & Reporting" <<Rectangle>> #AliceBlue {
+    
+    class WorkflowMetrics {
+        - workflowId: String
+        - averageCompletionTime: Duration
+        - slaComplianceRate: Float
+        - totalRequests: Integer
+        - pendingRequests: Integer
+        - bottleneckSteps: List<String>
+        - periodStart: DateTime
+        - periodEnd: DateTime
+        __
+        + calculate(workflowId, period): WorkflowMetrics
+        + getAverageTime(): Duration
+        + getSLACompliance(): Float
+        + getBottlenecks(): List<BottleneckInfo>
+        + compareWith(otherMetrics): Comparison
+    }
+    
+    class AnalyticsEngine {
+        - metricsRepository: MetricsRepo
+        - mlModel: PredictionModel
+        __
+        + calculateMetrics(workflowId): WorkflowMetrics
+        + detectBottlenecks(workflowId): List<Bottleneck>
+        + predictSLAViolation(task): Prediction
+        + detectAnomalies(workflowId): List<Anomaly>
+        + generatePerformanceReport(): Report
+        + getWorkloadDistribution(): Distribution
+        + recommendOptimizations(): List<Recommendation>
+    }
+    
+    class SimulationEngine {
+        - simulationId: String
+        - workflowId: String
+        - parameters: SimulationParams
+        - results: SimulationResults
+        __
+        + configure(params): void
+        + run(iterations): SimulationResults
+        # generateSyntheticLoad(count): List<Request>
+        + predictDelays(): List<Delay>
+        + predictResourceLoad(): ResourceForecast
+        + validateSLAFeasibility(): SLAValidation
+        + exportResults(): Report
+    }
+}
+
+' ==================== INTEGRATION ====================
+package "External Integrations" <<Rectangle>> #LemonChiffon {
+    
+    abstract class ExternalServiceConnector {
+        - connectorId: String
+        # serviceType: String
+        # endpoint: String
+        - credentials: Credentials
+        # isConnected: Boolean
+        __
+        + {abstract} connect(): void
+        + {abstract} disconnect(): void
+        + testConnection(): Boolean
+        + execute(action, params): Response
+        # handleError(error): void
+    }
+    
+    class WebhookHandler {
+        - handlerId: String
+        - endpoint: String
+        - secretKey: String
+        - eventMappings: Map<String,Handler>
+        __
+        + register(endpoint): String
+        # validateSignature(req): Boolean
+        + processEvent(event): void
+        + triggerWorkflow(eventData): Request
+    }
+    
+    class APIConnector {
+        - baseUrl: String
+        - authToken: String
+        - timeout: Integer
+        - retryPolicy: RetryPolicy
+        __
+        + get(path, params): Response
+        + post(path, body): Response
+        + put(path, body): Response
+        + delete(path): Response
+        # setAuthHeader(token): void
+        # handleResponse(response): Object
+    }
+}
+
+' ==================== SUPPORTING CLASSES ====================
+package "Supporting Classes" <<Rectangle>> #WhiteSmoke {
+    
+    class Comment {
+        - commentId: String
+        - requestId: String
+        - userId: String
+        - content: String
+        - createdAt: DateTime
+        __
+        + create(requestId, content): Comment
+        + update(content): void
+        + delete(): void
+    }
+    
+    class Attachment {
+        - attachmentId: String
+        - requestId: String
+        - fileName: String
+        - fileSize: Long
+        - mimeType: String
+        - storagePath: String
+        - uploadedBy: String
+        - uploadedAt: DateTime
+        __
+        + upload(requestId, file): Attachment
+        + download(): File
+        + delete(): void
+        + getUrl(): String
+    }
+    
+    class TimelineEntry {
+        - entryId: String
+        - requestId: String
+        - eventType: String
+        - description: String
+        - userId: String
+        - timestamp: DateTime
+        - metadata: JSON
+        __
+        + create(requestId, event): TimelineEntry
+        + getForRequest(requestId): List<TimelineEntry>
+    }
+}
+
+' ==================== COMPOSITION RELATIONSHIPS ====================
+' Strong ownership - child cannot exist without parent (8 total)
+
+Organization *-- "1..*" Department : owns >
+Workflow *-- "1..*" WorkflowStep : contains >
+WorkflowStep *-- "0..*" Transition : defines >
+WorkflowStep *-- "1..*" StepAction : provides >
+Request *-- "0..*" Comment : contains >
+Request *-- "0..*" Attachment : contains >
+Request *-- "0..*" TimelineEntry : tracks >
+WorkflowInstance *-- "1" ExecutionContext : has >
+
+' ==================== AGGREGATION RELATIONSHIPS ====================
+' Weak ownership - child can exist independently (7 total)
+
+Organization o-- "1..*" User : employs >
+Department o-- "0..*" User : contains >
+Role o-- "1..*" Permission : includes >
+Policy o-- "*" Rule : enforces >
+TaskQueue o-- "0..*" Task : manages >
+RuleEngine o-- "1..*" Rule : uses >
+EscalationEngine o-- "1..*" EscalationPolicy : applies >
+
+' ==================== ASSOCIATION RELATIONSHIPS ====================
+' General relationships between classes (15 total)
+
+User "0..*" -- "0..*" Role : assigned to >
+User "1" -- "0..*" Session : authenticated by >
+User "1" -- "0..*" Request : submits >
+User "1" -- "0..*" Task : assigned <
+
+Request "*" -- "1" Workflow : instance of >
+Request "1" -- "1" WorkflowInstance : executes >
+Request "1" -- "0..*" Task : generates >
+
+Task "*" -- "1" WorkflowStep : based on >
+Task "*" -- "0..1" Role : assigned to role >
+
+WorkflowStep "*" -- "1" Role : assigned to >
+
+Transition "*" -- "0..1" Rule : evaluates >
+
+Notification "*" -- "1" User : sent to >
+NotificationService "1" -- "0..*" Notification : sends >
+
+AnalyticsEngine "1" -- "0..*" WorkflowMetrics : generates >
+SimulationEngine "1" -- "1" Workflow : simulates >
+
+' ==================== DEPENDENCY RELATIONSHIPS ====================
+' Uses relationship (dashed arrows) (5 total)
+
+NotificationService ..> Task : monitors
+EscalationEngine ..> Task : monitors
+AnalyticsEngine ..> Workflow : analyzes
+WebhookHandler ..> Request : triggers
+RuleEngine ..> Transition : determines
+
+' ==================== INHERITANCE RELATIONSHIPS ====================
+' Generalization (1 total)
+
+APIConnector --|> ExternalServiceConnector
+
+' ==================== SELF-REFERENCES ====================
+' Hierarchical relationships (1 total)
+
+Department "0..1" -- "0..*" Department : parent of >
+
+' ==================== NOTES ====================
+note top of Organization
+  **RELATIONSHIP TYPES:**
+  **Composition** ◆ = Filled diamond (strong ownership)
+  **Aggregation** ◇ = Hollow diamond (weak ownership)
+  **Association** — = Simple line (relationship)
+  **Inheritance** △ = Hollow triangle (is-a)
+  **Dependency** ⇢ = Dashed arrow (uses)
+  
+  **TOTAL: 37 Relationships**
+  8 Composition + 7 Aggregation + 15 Association
+  + 5 Dependency + 1 Inheritance + 1 Self-Reference
+end note
+
+note right of Workflow
+  A Workflow defines the template.
+  Request creates instances.
+  WorkflowInstance manages execution.
+end note
+
+note bottom of Task
+  Tasks are generated from Requests
+  based on WorkflowSteps.
+  They are assigned to Users based
+  on Roles.
+end note
+
+@enduml
